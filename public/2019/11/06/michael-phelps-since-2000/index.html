@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Michael Phelps since 2000 | A Hugo website</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/aplotaday">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Michael Phelps since 2000</span></h1>
+<h2 class="author">Bilal [bilal@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/06</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was published in New York Times. <a href="https://www.nytimes.com/interactive/2016/08/09/sports/olympics/2016-08-09-olympics-phelps-vs-phelps.html" class="uri">https://www.nytimes.com/interactive/2016/08/09/sports/olympics/2016-08-09-olympics-phelps-vs-phelps.html</a></p>
+<p><img src="/images/nyt_medals-945.png" /></p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.</p>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+phelps_medals &lt;- readxl::read_excel(&quot;./data/phelps_medals.xlsx&quot;)
+phelps_medals$Event_Type &lt;- factor(phelps_medals$Event_Type, levels = rev(phelps_medals$Event_Type %&gt;% unique()))
+phelps_medals$Competetion_Name &lt;- factor(phelps_medals$Competetion_Name, levels = phelps_medals$Competetion_Name %&gt;% unique())</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>p &lt;- ggplot(phelps_medals, aes(x=Competetion_Name,y=Event_Type)) + 
+  geom_tile(aes(fill=Result)) + 
+  theme_bw() + 
+  scale_fill_manual(values=c(&quot;#FAE155&quot;,&quot;#DBDBDB&quot;,&quot;#C6A891&quot;,&quot;#FFFFFF&quot;,&quot;#FFFFFF&quot;,&quot;#FFFFFF&quot;,&quot;#FFFFFF&quot;,&quot;#FFFFFF&quot;)) +
+  theme(
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y= element_blank(),
+    legend.position=&quot;none&quot;,
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank(),
+    plot.title = element_text(hjust=0,face=&quot;bold&quot;)
+  ) + 
+  xlab(&quot;&quot;) + ylab(&quot;&quot;) + 
+  geom_text(
+    aes(
+      x = Competetion_Name , y = Event_Type , 
+      label = ifelse(Result %in% c(&quot;RETIRED&quot;,&quot;SUSPENDED&quot;),&quot;&quot;,Result)
+    ),size =3
+  ) + 
+  geom_segment(data = data.frame(x1=rep(0.5,4),x2=rep(13.5,4),y1=seq(1.5,4.5,1),y2=seq(1.5,4.5,1)),aes(x = x1, y = y1, xend = x2, yend = y2),size=0.5,color=&quot;dark grey&quot;) + 
+  geom_segment(data = data.frame(x1=rep(14.5,4),x2=rep(15.5,4),y1=seq(1.5,4.5,1),y2=seq(1.5,4.5,1)),aes(x = x1, y = y1, xend = x2, yend = y2),size=0.5,color=&quot;dark grey&quot;) + 
+  geom_segment(data = data.frame(x1=rep(16.5,4),x2=rep(17.5,4),y1=seq(1.5,4.5,1),y2=seq(1.5,4.5,1)),aes(x = x1, y = y1, xend = x2, yend = y2),size=0.5,color=&quot;dark grey&quot;) + 
+  geom_segment(data = data.frame(x1=rep(0.5,2),x2=rep(17.5,2),y1=c(0.5,5.5),y2=c(0.5,5.5)),aes(x = x1, y = y1, xend = x2, yend = y2),size=0.5,color=&quot;dark grey&quot;) +
+  geom_segment(data = data.frame(x1=seq(0.5,17.5,1),x2=seq(0.5,17.5,1),y1=rep(0.5,18),y2=rep(5.5,18)),aes(x = x1, y = y1, xend = x2, yend = y2),size=0.5,color=&quot;dark grey&quot;) + 
+  annotate(&quot;text&quot;, label = &quot;Note: Medals in non-Olympic years are for the Pan Pacific Championships (PP) or the World Championships (WC).\nPhelps was retired in 2013, and being punished for a D.U.I. in  2015. Relay races and a 2006 silver medal in the backstroke are not shown.&quot;, x = 0.5, y = -0.5, size = 4, colour = &quot;grey&quot;,hjust = 0,vjust=0) + 
+  geom_text(
+    aes(x=X,y=Y,label=label),
+    data=data.frame(
+      X=seq(1,17,1),Y=5.8,label=as.character(unique(phelps_medals$Competetion_Name))
+    ),
+    size = 3,
+    fontface = ifelse(as.character(unique(phelps_medals$Competetion_Name)) %in% c(&quot;Sydney 2000&quot;,&quot;Athens 2004&quot;,&quot;Beijing 2008&quot;,&quot;London 2012&quot;,&quot;Rio 2016&quot;),&quot;bold&quot;,&quot;plain&quot;)
+  ) + 
+  ggtitle(&quot;Michael Phelps in Major Championships since 2000\n&quot;) + 
+  geom_text(x=14,y = 3,label=&quot;RETIRED&quot;,angle=90) + 
+  geom_text(x=16,y = 3,label=&quot;SUSPENDED (for D.U.I)&quot;,angle=90) + 
+  scale_y_discrete(
+    labels=c(
+      &quot;100m butterfly&quot; = &quot;100m\nbutterfly&quot;,
+      &quot;200m butterfly&quot; = &quot;200m\nbutterfly&quot;,
+      &quot;200m freestyle&quot; = &quot;200m\nfreestyle&quot;,
+      &quot;200m medley&quot; = &quot;200m\nmedley&quot;,
+      &quot;400m medley&quot; = &quot;400m\nmedley&quot;)
+  )
+
+# turnoff text clipping
+gt &lt;- ggplot_gtable(ggplot_build(p))
+gt$layout$clip[gt$layout$name == &quot;panel&quot;] &lt;- &quot;off&quot;
+grid.draw(gt)</code></pre>
+<p><img src="/post/2019-11-06-michael-phelps-medals_files/figure-html/plot-1.png" width="1056" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+
