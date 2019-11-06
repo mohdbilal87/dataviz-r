@@ -1,4 +1,4 @@
-baseurl = "/"
+baseurl = "https://mohdbilal87.github.io/dataviz-r/"
 publishDir = "docs"
 languageCode = "en-us"
 author = "Dinesh Ladi and Bilal"
