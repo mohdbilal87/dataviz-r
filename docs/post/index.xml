@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on A Hugo website</title>
+    <title>Posts on Data Viz in ggplot2</title>
     <link>/dataviz-r/post/</link>
-    <description>Recent content in Posts on A Hugo website</description>
+    <description>Recent content in Posts on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 06 Nov 2019 00:00:00 +0000</lastBuildDate>
@@ -18,7 +18,7 @@
       
       <guid>/dataviz-r/2019/11/06/michael-phelps-since-2000/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2016/08/09/sports/olympics/2016-08-09-olympics-phelps-vs-phelps.html
-Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
 library(dplyr)library(tidyr)library(ggplot2)library(grid)library(gridExtra)phelps_medals &amp;lt;- readxl::read_excel(&amp;quot;./data/phelps_medals.xlsx&amp;quot;)phelps_medals$Event_Type &amp;lt;- factor(phelps_medals$Event_Type, levels = rev(phelps_medals$Event_Type %&amp;gt;% unique()))phelps_medals$Competetion_Name &amp;lt;- factor(phelps_medals$Competetion_Name, levels = phelps_medals$Competetion_Name %&amp;gt;% unique())GGPLOT2p &amp;lt;- ggplot(phelps_medals, aes(x=Competetion_Name,y=Event_Type)) + geom_tile(aes(fill=Result)) + theme_bw() + scale_fill_manual(values=c(&amp;quot;#FAE155&amp;quot;,&amp;quot;#DBDBDB&amp;quot;,&amp;quot;#C6A891&amp;quot;,&amp;quot;#FFFFFF&amp;quot;,&amp;quot;#FFFFFF&amp;quot;,&amp;quot;#FFFFFF&amp;quot;,&amp;quot;#FFFFFF&amp;quot;,&amp;quot;#FFFFFF&amp;quot;)) +theme(panel.</description>
     </item>
     

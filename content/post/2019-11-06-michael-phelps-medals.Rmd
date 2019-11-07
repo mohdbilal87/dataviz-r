@@ -15,7 +15,7 @@ knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
 
 The image below was published in New York Times. <https://www.nytimes.com/interactive/2016/08/09/sports/olympics/2016-08-09-olympics-phelps-vs-phelps.html> 
 
-![](/images/nyt_medals-945.png)
+<p><img src="/dataviz-r/post/2019-11-06-michael-phelps-medals_files/images/nyt_medals-945.png" width="1056" /></p>
 
 ### Data Preparation
 

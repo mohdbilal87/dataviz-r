@@ -2,7 +2,7 @@ baseurl = "https://mohdbilal87.github.io/dataviz-r/"
 publishDir = "docs"
 languageCode = "en-us"
 author = "Dinesh Ladi and Bilal"
-title = "A Hugo website"
+title = "Data Viz in ggplot2"
 theme = "hugo-xmin"
 googleAnalytics = ""
 disqusShortname = ""
@@ -16,10 +16,10 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "/about/"
 [[menu.main]]
     name = "GitHub"
-    url = "https://github.com/mohdbilal87/aplotaday"
+    url = "https://github.com/mohdbilal87/dataviz-r"
 
 [params]
-    description = "A website built through Hugo and blogdown."
+    description = "Recreating charts in ggplot2."
 
     # options for highlight.js (version, additional languages, and theme)
     highlightjsVersion = "9.12.0"
