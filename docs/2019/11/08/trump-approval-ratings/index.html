@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trump Approval Ratings | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Trump Approval Ratings</span></h1>
+<h2 class="author">Bilal [bilal@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/08</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was published in FiveThirtyEight. <a href="https://projects.fivethirtyeight.com/trump-approval-ratings/" class="uri">https://projects.fivethirtyeight.com/trump-approval-ratings/</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-08-trump-approval-ratings_files/images/trump_approval_ratings.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was download from the link referred above.</p>
+<pre class="r"><code>library(dplyr)
+library(ggthemes)
+library(tidyr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+approval_polllist &lt;- readr::read_csv(&quot;./data/approval_polllist.csv&quot;) %&gt;% 
+  mutate(
+    modeldate   = as.Date(x = modeldate,  format = &quot;%m/%d/%Y&quot;),
+    startdate   = as.Date(x = startdate,  format = &quot;%m/%d/%Y&quot;),
+    enddate     = as.Date(x = enddate,    format = &quot;%m/%d/%Y&quot;),
+    createddate = as.Date(x = createddate,format = &quot;%m/%d/%Y&quot;)
+  ) %&gt;% dplyr::filter(subgroup == &quot;All polls&quot;)
+  
+
+approval_topline &lt;- readr::read_csv(&quot;./data/approval_topline.csv&quot;) %&gt;% 
+  mutate(
+    modeldate   = as.Date(x = modeldate,  format = &quot;%m/%d/%Y&quot;),
+    timestamp   = substr(timestamp, 11, nchar(timestamp)) %&gt;% as.Date(format = &quot;%d %b %Y&quot;)
+  ) %&gt;% dplyr::filter(subgroup == &quot;All polls&quot;)
+
+data_for_plot &lt;- tidyr::pivot_longer(
+  data = approval_topline, 
+  cols = c(&quot;approve_estimate&quot;,&quot;disapprove_estimate&quot;), 
+  names_to = &quot;estimate_type&quot;, 
+  values_to = &quot;approval_rating&quot;
+)
+
+data_for_plot2 &lt;- tidyr::pivot_longer(
+  data = approval_polllist, 
+  cols = c(&quot;approve&quot;,&quot;disapprove&quot;), 
+  names_to = &quot;approval_type&quot;, 
+  values_to = &quot;approval_rating&quot;
+)</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot(data = data_for_plot, aes( x = modeldate , y = round(x = approval_rating, digits = 1))) +
+  geom_line(aes(color = estimate_type, group = estimate_type), size = 1.5) +
+  geom_ribbon(aes(x = modeldate, ymin = approve_lo, ymax=approve_hi), fill=&quot;#009F29&quot;, alpha=0.2) +
+  geom_ribbon(aes(x = modeldate, ymin = disapprove_lo, ymax=disapprove_hi), fill=&quot;#FF7400&quot;, alpha=0.2) +
+  theme_fivethirtyeight() +
+  labs(title = &quot;Approval Ratings Donald Trump (All polls)&quot;) +
+  scale_x_date(
+    breaks = seq(as.Date(&quot;2017-01-01&quot;), as.Date(&quot;2019-10-01&quot;), by = &quot;quarter&quot;), 
+    labels = paste(c(&quot;JAN.&quot;,&quot;APRIL&quot;,&quot;JULY&quot;,&quot;OCT.&quot;),rep(2017:2019,each=4)) %&gt;% 
+      ifelse(!grepl(&quot;JAN&quot;,.),sub(&quot;\\s\\d{4}&quot;,&quot;&quot;,.),.) %&gt;% 
+      gsub(pattern = &quot;JAN. 2017&quot;, replacement = &quot;JAN. 23, 2017&quot;, x = .)
+  ) +
+  coord_cartesian(
+    xlim = c(min(data_for_plot$modeldate)-10,max(data_for_plot$modeldate)),
+    ylim = c(18, 82),
+    expand = FALSE,   # for clipping beyond max date
+    clip = &#39;off&#39;
+  ) + 
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(from = 20, to = 80, by = 10), 
+    labels = paste0(seq(from = 20, to = 80, by = 10), &quot;%&quot;)
+  ) + 
+  theme(
+    axis.text.x = element_text(size = 10, color = &quot;grey&quot;),
+    legend.position   = &quot;none&quot;,
+    panel.background  = element_rect(fill = &quot;white&quot;),
+    plot.background   = element_rect(fill = &quot;white&quot;),
+    plot.margin = unit(c(1,8,1,1), &quot;lines&quot;)
+  ) +
+  geom_vline(xintercept = max(data_for_plot$modeldate), linetype=&quot;dotted&quot;) +
+  geom_vline(xintercept = min(data_for_plot$modeldate), color = &quot;grey&quot;) +
+  geom_hline(yintercept = 50, color = &quot;black&quot;, size = 0.5) + # thicker h line
+  annotate(
+    geom = &quot;text&quot;, x = max(data_for_plot$modeldate), y = 83, 
+    label = &quot;DAY 1,022&quot;, colour = &quot;lightgrey&quot;
+  ) +
+  annotate(
+    geom = &quot;text&quot;, x = max(data_for_plot$modeldate) + 30, y = 54.3, 
+    label = &quot;54.3%&quot;, colour = &quot;#FF7400&quot;, size = 5
+  ) +
+  annotate(
+    geom = &quot;text&quot;, x = max(data_for_plot$modeldate) + 60, y = 54.3, 
+    label = &quot;Disapprove&quot;, colour = &quot;black&quot;, size = 3, hjust = 0
+  ) +
+  annotate(
+    geom = &quot;text&quot;, x = max(data_for_plot$modeldate) + 30, y = 41.4, 
+    label = &quot;41.4%&quot;, colour = &quot;#009F29&quot;, size = 5
+  ) +
+  annotate(
+    geom = &quot;text&quot;, x = max(data_for_plot$modeldate) + 60, y = 41.4, 
+    label = &quot;Approve&quot;, colour = &quot;black&quot;, size = 3, hjust = 0
+  ) +
+  annotate(
+    geom = &quot;text&quot;, x = min(data_for_plot$modeldate)-55, y = 16, 
+    label = &quot;JAN. 23, 2017&quot;, colour = &quot;grey&quot;, size = 3.8, hjust = 0
+  ) +
+  geom_point(data = data_for_plot2, aes( x = startdate, y = approval_rating, fill = approval_type, color = approval_type), alpha = 0.2, shape = 16) +
+  scale_colour_manual(values = c(&quot;#009F29&quot;, &quot;#009F29&quot;, &quot;#FF7400&quot;, &quot;#FF7400&quot;))</code></pre>
+<p><img src="/dataviz-r/post/2019-11-08-trump-approval-ratings_files/figure-html/plot-1.png" width="1152" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+

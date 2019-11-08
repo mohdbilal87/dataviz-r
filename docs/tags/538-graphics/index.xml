@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>538 Graphics on Data Viz in ggplot2</title>
+    <link>/dataviz-r/tags/538-graphics/</link>
+    <description>Recent content in 538 Graphics on Data Viz in ggplot2</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 08 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/dataviz-r/tags/538-graphics/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Trump Approval Ratings</title>
+      <link>/dataviz-r/2019/11/08/trump-approval-ratings/</link>
+      <pubDate>Fri, 08 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/08/trump-approval-ratings/</guid>
+      <description>Original ImageThe image below was published in FiveThirtyEight. https://projects.fivethirtyeight.com/trump-approval-ratings/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was download from the link referred above.
+library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)library(gridExtra)approval_polllist &amp;lt;- readr::read_csv(&amp;quot;./data/approval_polllist.csv&amp;quot;) %&amp;gt;% mutate(modeldate = as.Date(x = modeldate, format = &amp;quot;%m/%d/%Y&amp;quot;),startdate = as.Date(x = startdate, format = &amp;quot;%m/%d/%Y&amp;quot;),enddate = as.Date(x = enddate, format = &amp;quot;%m/%d/%Y&amp;quot;),createddate = as.</description>
+    </item>
+    
+  </channel>
+</rss>

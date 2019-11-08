@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 08 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Trump Approval Ratings</title>
+      <link>/dataviz-r/2019/11/08/trump-approval-ratings/</link>
+      <pubDate>Fri, 08 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/08/trump-approval-ratings/</guid>
+      <description>Original ImageThe image below was published in FiveThirtyEight. https://projects.fivethirtyeight.com/trump-approval-ratings/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was download from the link referred above.
+library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)library(gridExtra)approval_polllist &amp;lt;- readr::read_csv(&amp;quot;./data/approval_polllist.csv&amp;quot;) %&amp;gt;% mutate(modeldate = as.Date(x = modeldate, format = &amp;quot;%m/%d/%Y&amp;quot;),startdate = as.Date(x = startdate, format = &amp;quot;%m/%d/%Y&amp;quot;),enddate = as.Date(x = enddate, format = &amp;quot;%m/%d/%Y&amp;quot;),createddate = as.</description>
+    </item>
     
     <item>
       <title>Mapping 50 years of ice loss in glaciers</title>
@@ -19,7 +30,7 @@
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>

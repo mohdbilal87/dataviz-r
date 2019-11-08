@@ -1,0 +1,126 @@
+---
+title: "Trump Approval Ratings"
+author: "Bilal [bilal@actifydatalabs.com]"
+date: 2019-11-08
+categories: ["R"]
+tags: ["R", "Data Viz", "ggplot", "538 Graphics"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
+```
+
+### Original Image
+
+
+The image below was published in FiveThirtyEight. <https://projects.fivethirtyeight.com/trump-approval-ratings/> 
+
+<p><img src="/dataviz-r/post/2019-11-08-trump-approval-ratings_files/images/trump_approval_ratings.png" width="1056" /></p>
+
+### Data Preparation
+
+
+Below is the accompanying code to reproduce the chart above. The data was download from the link referred above.
+
+```{r data}
+library(dplyr)
+library(ggthemes)
+library(tidyr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+approval_polllist <- readr::read_csv("./data/approval_polllist.csv") %>% 
+  mutate(
+    modeldate   = as.Date(x = modeldate,  format = "%m/%d/%Y"),
+    startdate   = as.Date(x = startdate,  format = "%m/%d/%Y"),
+    enddate     = as.Date(x = enddate,    format = "%m/%d/%Y"),
+    createddate = as.Date(x = createddate,format = "%m/%d/%Y")
+  ) %>% dplyr::filter(subgroup == "All polls")
+  
+
+approval_topline <- readr::read_csv("./data/approval_topline.csv") %>% 
+  mutate(
+    modeldate   = as.Date(x = modeldate,  format = "%m/%d/%Y"),
+    timestamp   = substr(timestamp, 11, nchar(timestamp)) %>% as.Date(format = "%d %b %Y")
+  ) %>% dplyr::filter(subgroup == "All polls")
+
+data_for_plot <- tidyr::pivot_longer(
+  data = approval_topline, 
+  cols = c("approve_estimate","disapprove_estimate"), 
+  names_to = "estimate_type", 
+  values_to = "approval_rating"
+)
+
+data_for_plot2 <- tidyr::pivot_longer(
+  data = approval_polllist, 
+  cols = c("approve","disapprove"), 
+  names_to = "approval_type", 
+  values_to = "approval_rating"
+)
+```
+
+### GGPLOT2
+
+
+```{r plot, tidy=FALSE, fig.width=12}
+ggplot(data = data_for_plot, aes( x = modeldate , y = round(x = approval_rating, digits = 1))) +
+  geom_line(aes(color = estimate_type, group = estimate_type), size = 1.5) +
+  geom_ribbon(aes(x = modeldate, ymin = approve_lo, ymax=approve_hi), fill="#009F29", alpha=0.2) +
+  geom_ribbon(aes(x = modeldate, ymin = disapprove_lo, ymax=disapprove_hi), fill="#FF7400", alpha=0.2) +
+  theme_fivethirtyeight() +
+  labs(title = "Approval Ratings Donald Trump (All polls)") +
+  scale_x_date(
+    breaks = seq(as.Date("2017-01-01"), as.Date("2019-10-01"), by = "quarter"), 
+    labels = paste(c("JAN.","APRIL","JULY","OCT."),rep(2017:2019,each=4)) %>% 
+      ifelse(!grepl("JAN",.),sub("\\s\\d{4}","",.),.) %>% 
+      gsub(pattern = "JAN. 2017", replacement = "JAN. 23, 2017", x = .)
+  ) +
+  coord_cartesian(
+    xlim = c(min(data_for_plot$modeldate)-10,max(data_for_plot$modeldate)),
+    ylim = c(18, 82),
+    expand = FALSE,   # for clipping beyond max date
+    clip = 'off'
+  ) + 
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(from = 20, to = 80, by = 10), 
+    labels = paste0(seq(from = 20, to = 80, by = 10), "%")
+  ) + 
+  theme(
+    axis.text.x = element_text(size = 10, color = "grey"),
+    legend.position   = "none",
+    panel.background  = element_rect(fill = "white"),
+    plot.background   = element_rect(fill = "white"),
+    plot.margin = unit(c(1,8,1,1), "lines")
+  ) +
+  geom_vline(xintercept = max(data_for_plot$modeldate), linetype="dotted") +
+  geom_vline(xintercept = min(data_for_plot$modeldate), color = "grey") +
+  geom_hline(yintercept = 50, color = "black", size = 0.5) + # thicker h line
+  annotate(
+    geom = "text", x = max(data_for_plot$modeldate), y = 83, 
+    label = "DAY 1,022", colour = "lightgrey"
+  ) +
+  annotate(
+    geom = "text", x = max(data_for_plot$modeldate) + 30, y = 54.3, 
+    label = "54.3%", colour = "#FF7400", size = 5
+  ) +
+  annotate(
+    geom = "text", x = max(data_for_plot$modeldate) + 60, y = 54.3, 
+    label = "Disapprove", colour = "black", size = 3, hjust = 0
+  ) +
+  annotate(
+    geom = "text", x = max(data_for_plot$modeldate) + 30, y = 41.4, 
+    label = "41.4%", colour = "#009F29", size = 5
+  ) +
+  annotate(
+    geom = "text", x = max(data_for_plot$modeldate) + 60, y = 41.4, 
+    label = "Approve", colour = "black", size = 3, hjust = 0
+  ) +
+  annotate(
+    geom = "text", x = min(data_for_plot$modeldate)-55, y = 16, 
+    label = "JAN. 23, 2017", colour = "grey", size = 3.8, hjust = 0
+  ) +
+  geom_point(data = data_for_plot2, aes( x = startdate, y = approval_rating, fill = approval_type, color = approval_type), alpha = 0.2, shape = 16) +
+  scale_colour_manual(values = c("#009F29", "#009F29", "#FF7400", "#FF7400"))
+```
