@@ -6,10 +6,20 @@
     <description>Recent content in Data Viz on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 08 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 09 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/data-viz/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Can money buy happiness?</title>
+      <link>/dataviz-r/2019/11/09/can-money-buy-happiness/</link>
+      <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/09/can-money-buy-happiness/</guid>
+      <description>Original ImageThe image below was published in this website. https://happiness.datadesign.studio/Data PreparationBelow is the accompanying code to reproduce the chart above. The data is available on the source website.
+library(dplyr)library(ggplot2)library(ggiraph)data &amp;lt;- readxl::read_xlsx(&amp;#39;./data/happiness/data.xlsx&amp;#39;, sheet = 1) %&amp;gt;% janitor::clean_names()data &amp;lt;- data %&amp;gt;% filter(world_happiness_report_score!=&amp;#39;-&amp;#39;, gdp_per_capita_ppp!=&amp;#39;&amp;#39;) %&amp;gt;% mutate_at(.vars = vars(c(&amp;quot;world_happiness_report_score&amp;quot;,&amp;quot;gdp_per_capita_ppp&amp;quot;)), .funs = as.numeric) lookup &amp;lt;- read.csv(&amp;#39;./data/happiness/Countries-Continents.csv&amp;#39;, stringsAsFactors = F)data &amp;lt;- inner_join(data, lookup, by = c(&amp;quot;indicator&amp;quot; = &amp;quot;Country&amp;quot;)) %&amp;gt;% mutate(Continent = toupper(Continent))GGPLOT2p &amp;lt;- ggplot(data = data, aes(x = gdp_per_capita_ppp, y = world_happiness_report_score, size = population, colour = Continent)) + geom_point_interactive(alpha = 0.</description>
+    </item>
     
     <item>
       <title>Trump Approval Ratings</title>
@@ -30,7 +40,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>
