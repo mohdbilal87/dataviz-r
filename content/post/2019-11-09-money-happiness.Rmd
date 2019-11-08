@@ -17,7 +17,8 @@ knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
 
 
 The image below was published in this website. <https://happiness.datadesign.studio/> 
-<p><img src="/dataviz-r/post/2019-11-09-money-happiness_files/images/happiness.png" width="1056" /></p>
+
+<p><img src="/dataviz-r/post/2019-11-09-money-happiness_files/images/happiness.jpg" width="1056" /></p>
   
 ### Data Preparation
   

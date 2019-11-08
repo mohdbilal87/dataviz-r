@@ -26,7 +26,8 @@
       <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/2019/11/09/can-money-buy-happiness/</guid>
-      <description>Original ImageThe image below was published in this website. https://happiness.datadesign.studio/Data PreparationBelow is the accompanying code to reproduce the chart above. The data is available on the source website.
+      <description>Original ImageThe image below was published in this website. https://happiness.datadesign.studio/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data is available on the source website.
 library(dplyr)library(ggplot2)library(ggiraph)data &amp;lt;- readxl::read_xlsx(&amp;#39;./data/happiness/data.xlsx&amp;#39;, sheet = 1) %&amp;gt;% janitor::clean_names()data &amp;lt;- data %&amp;gt;% filter(world_happiness_report_score!=&amp;#39;-&amp;#39;, gdp_per_capita_ppp!=&amp;#39;&amp;#39;) %&amp;gt;% mutate_at(.vars = vars(c(&amp;quot;world_happiness_report_score&amp;quot;,&amp;quot;gdp_per_capita_ppp&amp;quot;)), .funs = as.numeric) lookup &amp;lt;- read.csv(&amp;#39;./data/happiness/Countries-Continents.csv&amp;#39;, stringsAsFactors = F)data &amp;lt;- inner_join(data, lookup, by = c(&amp;quot;indicator&amp;quot; = &amp;quot;Country&amp;quot;)) %&amp;gt;% mutate(Continent = toupper(Continent))GGPLOT2p &amp;lt;- ggplot(data = data, aes(x = gdp_per_capita_ppp, y = world_happiness_report_score, size = population, colour = Continent)) + geom_point_interactive(alpha = 0.</description>
     </item>
     
