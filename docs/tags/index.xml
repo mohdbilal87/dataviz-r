@@ -6,15 +6,24 @@
     <description>Recent content in Tags on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 09 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 10 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>/r/dataisbeautiful</title>
+      <link>/dataviz-r/tags/r/dataisbeautiful/</link>
+      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/tags/r/dataisbeautiful/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Data Viz</title>
       <link>/dataviz-r/tags/data-viz/</link>
-      <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/tags/data-viz/</guid>
       <description></description>
@@ -23,7 +32,7 @@
     <item>
       <title>ggplot</title>
       <link>/dataviz-r/tags/ggplot/</link>
-      <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/tags/ggplot/</guid>
       <description></description>
@@ -32,7 +41,7 @@
     <item>
       <title>R</title>
       <link>/dataviz-r/tags/r/</link>
-      <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/tags/r/</guid>
       <description></description>

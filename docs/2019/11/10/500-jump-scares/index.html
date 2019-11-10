@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>500 Jump Scares | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">500 Jump Scares</span></h1>
+<h2 class="author">Bilal [bilal@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/10</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was published on reddit [/r/dataisbeautiful] by user /u/Delafields as a submission for the October month challenge titled “Visualize the Jump-Scares for over 500 horror, thriller, and sci-fi Movies” <a href="https://www.reddit.com/r/dataisbeautiful/comments/dei68x/battle_dataviz_battle_for_the_month_of_october/" class="uri">https://www.reddit.com/r/dataisbeautiful/comments/dei68x/battle_dataviz_battle_for_the_month_of_october/</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-10-500-jump-scares_files/images/scary_swarm.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was scraped from the website <strong><a href="https://wheresthejump.com/full-movie-list/" class="uri">https://wheresthejump.com/full-movie-list/</a></strong>.</p>
+<pre class="r"><code>library(dplyr)
+library(rvest)
+library(xml2)
+library(ggplot2)
+library(ggbeeswarm)
+library(janitor)
+
+horror_movie &lt;- xml2::read_html(x = &quot;https://wheresthejump.com/full-movie-list/&quot;) %&gt;%
+    html_nodes(xpath=&#39;//*[@id=&quot;tablepress-1&quot;]&#39;) %&gt;%
+    html_table() %&gt;% .[[1]] %&gt;% clean_names()</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot(data = horror_movie, aes(x=jump_scare_rating,y=jump_count)) + 
+  geom_quasirandom(aes(color=imdb), method = &quot;tukeyDense&quot;, cex=2) +
+  scale_colour_gradientn( # for custom coloring of legend colors via rgb2hex
+    colours = c(
+      &quot;#FFF9C7&quot;,&quot;#FEEEA8&quot;,&quot;#FEDD86&quot;,&quot;#FEC654&quot;,&quot;#FEA836&quot;,
+      &quot;#F78A21&quot;,&quot;#E96D12&quot;, &quot;#D15104&quot;,&quot;#AF3E03&quot;,&quot;#8A2F04&quot;
+    ),
+    aesthetics = c(&quot;colour&quot;,&quot;fill&quot;),
+    breaks = 1:10, labels=c(&quot;1.0&quot;,rep(&quot;&quot;,8),&quot;10.0&quot;),
+    limits=c(1,10),
+    guide = guide_colorbar(
+      title = &quot;IMDB Rating&quot;,
+      title.position = &quot;top&quot;,
+      title.hjust = 0.5,    # centering legend title
+      ticks = FALSE,
+      draw.llim = FALSE,
+      draw.ulim = FALSE,
+      raster = FALSE, # for rendering as set of rectangles
+      frame.colour = NULL
+    )
+  ) + 
+  scale_y_continuous(breaks = seq(from = 0,to = 35, by = 5)) +
+  scale_x_continuous(breaks = seq(from = 0,to = 5, by = 0.5)) +
+  # scale_x_continuous(breaks = seq(from = 0,to = 5, by = 0.5)) +
+  theme_classic() + 
+  theme(
+      panel.grid.minor.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.grid.major.y = element_line(color = &quot;white&quot;),
+      plot.title = element_text(hjust=0.5,face=&quot;bold&quot;, size = 25, family = &quot;&quot;),
+      plot.subtitle = element_text(hjust = 0.5), # centering subtitle
+      panel.background   = element_rect(fill = &quot;#E6E6E6&quot;),
+      legend.position = c(.20, .825),            # custom legend position
+      legend.direction=&quot;horizontal&quot;,
+      legend.background = element_rect(fill=&quot;#E6E6E6&quot;),
+      legend.key.width  = unit(1, &quot;cm&quot;),         # width of legend
+      legend.key.height = unit(0.4, &quot;cm&quot;)        # height of legend
+  ) + 
+  xlab(&quot;Jump Scare Rating&quot;) + ylab(&quot;Jump Count&quot;) + 
+  labs(
+      title = &quot;500 Jump Scares&quot;,
+      subtitle = &quot;Quantity over Quality. More jump scares equal a higher jump scare rating.\nIMDB seems to disagree. Higher IMDB scores are concentrated in the lower scare ratings.&quot;
+  ) +
+  annotate(geom = &quot;text&quot;, x = 4.4, y = 4, label = &quot;symbol(&#39;\343&#39;)~Jeremy~Fields~2019&quot;,
+           parse=TRUE, hjust = 0, size = 3) +    # placing caption for source attribution
+  annotate(geom = &quot;text&quot;, x = 4.4, y = 3, label = &quot;Source: wheresthejump.com&quot;, 
+           parse=FALSE, hjust = 0, size = 3)</code></pre>
+<p><img src="/dataviz-r/post/2019-11-10-500-jump-scares_files/figure-html/plot-1.png" width="1056" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+

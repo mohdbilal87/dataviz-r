@@ -6,10 +6,21 @@
     <description>Recent content in Data Viz on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 09 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 10 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/data-viz/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>500 Jump Scares</title>
+      <link>/dataviz-r/2019/11/10/500-jump-scares/</link>
+      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/10/500-jump-scares/</guid>
+      <description>Original ImageThe image below was published on reddit [/r/dataisbeautiful] by user /u/Delafields as a submission for the October month challenge titled “Visualize the Jump-Scares for over 500 horror, thriller, and sci-fi Movies” https://www.reddit.com/r/dataisbeautiful/comments/dei68x/battle_dataviz_battle_for_the_month_of_october/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was scraped from the website https://wheresthejump.com/full-movie-list/.
+library(dplyr)library(rvest)library(xml2)library(ggplot2)library(ggbeeswarm)library(janitor)horror_movie &amp;lt;- xml2::read_html(x = &amp;quot;https://wheresthejump.com/full-movie-list/&amp;quot;) %&amp;gt;%html_nodes(xpath=&amp;#39;//*[@id=&amp;quot;tablepress-1&amp;quot;]&amp;#39;) %&amp;gt;%html_table() %&amp;gt;% .</description>
+    </item>
     
     <item>
       <title>Can money buy happiness?</title>
@@ -41,7 +52,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>
