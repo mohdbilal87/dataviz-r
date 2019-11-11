@@ -19,7 +19,7 @@ knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
 The image below was published in Information is Beautiful. 
 <https://informationisbeautiful.net/visualizations/gender-pay-gap/>
 
-<p><img src="/dataviz-r/post/2019-11-11-gender_gap_files/images/gender_gap.png" width="1056" /></p>
+<p><img src="/dataviz-r/post/2019-11-11-gender_gap_files/images/gender_gap.jpg" width="1056" /></p>
   
 ### Data Preparation
   
