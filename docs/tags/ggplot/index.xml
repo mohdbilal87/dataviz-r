@@ -6,10 +6,21 @@
     <description>Recent content in ggplot on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 11 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/ggplot/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Gender Gap</title>
+      <link>/dataviz-r/2019/11/11/gender-gap/</link>
+      <pubDate>Mon, 11 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/11/gender-gap/</guid>
+      <description>Original ImageThe image below was published in Information is Beautiful.https://informationisbeautiful.net/visualizations/gender-pay-gap/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+library(ggplot2)library(ggalt)library(dplyr)data &amp;lt;- readxl::read_xlsx(&amp;#39;./data/gender_gap.xlsx&amp;#39;, sheet = &amp;quot;US&amp;quot;) %&amp;gt;%janitor::clean_names()### Remove duplicates based on occupation without changing orderdata &amp;lt;- distinct(data,occupation, .keep_all= TRUE) %&amp;gt;% mutate(row_no = row_number())categories &amp;lt;- c(&amp;quot;admin &amp;amp; organisation&amp;quot;,&amp;quot;Care &amp;amp; education&amp;quot;,&amp;quot;Creative &amp;amp; media&amp;quot;,&amp;quot;Law &amp;amp; justice&amp;quot;,&amp;quot;Manual Work&amp;quot;,&amp;quot;Sales &amp;amp; serving others&amp;quot;,&amp;quot;Science, tech &amp;amp; engineering&amp;quot;,&amp;quot;Senior managers &amp;amp; execs&amp;quot;,&amp;quot;All occupations average&amp;quot;)data &amp;lt;- data %&amp;gt;% mutate(face = ifelse(occupation %in% categories,&amp;quot;bold&amp;quot;,&amp;quot;plain&amp;quot;),cut = ifelse(occupation %in% categories, nrow(data) + 1 - row_no ,NA))GGPLOT2ggplot(data, aes(x=women_average_annual_salary, xend=men_average_annual_salary, y=reorder(occupation,-row_no))) + geom_dumbbell(colour_x=&amp;quot;#752650&amp;quot;, color = &amp;quot;#b2b2b2&amp;quot;,colour_xend =&amp;quot;#c4cc80&amp;quot;,size = 1,size_x = 3.</description>
+    </item>
     
     <item>
       <title>500 Jump Scares</title>
@@ -52,7 +63,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>

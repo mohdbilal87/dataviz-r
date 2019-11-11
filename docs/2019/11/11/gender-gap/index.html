@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gender Gap | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Gender Gap</span></h1>
+<h2 class="author">Dinesh [dinesh@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/11</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was published in Information is Beautiful.
+<a href="https://informationisbeautiful.net/visualizations/gender-pay-gap/" class="uri">https://informationisbeautiful.net/visualizations/gender-pay-gap/</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-11-gender_gap_files/images/gender_gap.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.</p>
+<pre class="r"><code>library(ggplot2)
+library(ggalt)
+library(dplyr)
+
+data &lt;- readxl::read_xlsx(&#39;./data/gender_gap.xlsx&#39;, sheet = &quot;US&quot;) %&gt;%
+  janitor::clean_names()
+
+### Remove duplicates based on occupation without changing order
+data &lt;- distinct(data,occupation, .keep_all= TRUE) %&gt;% mutate(row_no = row_number())
+
+categories &lt;- c(&quot;admin &amp; organisation&quot;,&quot;Care &amp; education&quot;,&quot;Creative &amp; media&quot;,&quot;Law &amp; justice&quot;,&quot;Manual Work&quot;,&quot;Sales &amp; serving others&quot;,&quot;Science, tech &amp; engineering&quot;,&quot;Senior managers &amp; execs&quot;,&quot;All occupations average&quot;)
+
+data &lt;- data %&gt;% mutate(face = ifelse(occupation %in% categories,&quot;bold&quot;,&quot;plain&quot;),
+                        cut = ifelse(occupation %in% categories, nrow(data) + 1 - row_no ,NA))</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot(data, aes(x=women_average_annual_salary, xend=men_average_annual_salary, y=reorder(occupation,-row_no))) + 
+  geom_dumbbell(colour_x=&quot;#752650&quot;, 
+                color = &quot;#b2b2b2&quot;,
+                colour_xend =&quot;#c4cc80&quot;,
+                size = 1,
+                size_x = 3.5,
+                size_xend = 3.5) + 
+  scale_x_continuous(breaks = seq(0,120000,10000), labels = seq(0,60,5), limits = c(0,120000),
+                     sec.axis = dup_axis(labels = seq(0,120,10), name = &quot;yearly salary (thousands)&quot;)) + 
+  labs(x=&quot;hourly rate&quot;, 
+       y = NULL,
+       #y=&quot;job / category of job&quot;, 
+       title=&quot;Gender Pay Gap&quot;) +
+  theme(plot.title = element_text(hjust=0.5, face=&quot;bold&quot;),
+        plot.background=element_rect(fill=&quot;#f7f7f7&quot;),
+        panel.background=element_rect(fill=&quot;#f7f7f7&quot;),
+        panel.grid.major.y=element_blank(),
+        panel.grid.major.x = element_line(colour = &quot;black&quot;),
+        panel.grid.minor.x = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_text(face = rev(data$face))
+#        axis.title.y = element_text(hjust = 0, vjust = 0, angle = 90, face = &quot;bold&quot;)
+        ) + 
+  geom_hline(yintercept = data$cut[!is.na(data$cut)] + 0.25, linetype = &quot;dotted&quot;) </code></pre>
+<p><img src="/dataviz-r/post/2019-11-11-gender_gap_files/figure-html/plot-1.png" width="960" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+
