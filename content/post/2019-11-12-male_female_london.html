@@ -1,0 +1,94 @@
+---
+title: "Population of London"
+author: "Bilal [bilal@actifydatalabs.com]"
+date: 2019-11-12
+categories: ["R"]
+tags: ["R", "Data Viz", "ggplot", "Tableau Public"]
+---
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was featured in Tableau Public Gallery. <a href="https://public.tableau.com/profile/daniel.caroli#!/vizhome/ThePopulationofLondon/Main" class="uri">https://public.tableau.com/profile/daniel.caroli#!/vizhome/ThePopulationofLondon/Main</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-12-male_female_london_files/images/london_male_female.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was sourced from <strong>data export</strong> options in the link above.</p>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(janitor)
+
+population_london &lt;- readr::read_csv(&quot;./data/Adjusted_data.csv&quot;) %&gt;% 
+  clean_names() %&gt;% 
+  select(age_group, label_position, female, calculation1, male, year) %&gt;% 
+  mutate(
+    female = gsub(pattern = &quot;K&quot;, replacement = &quot;&quot;, x = female) %&gt;% as.numeric,
+    female = female*1000*(-1),
+    male   = gsub(pattern = &quot;K&quot;, replacement = &quot;&quot;, x = male) %&gt;% as.numeric,
+    male   = male*1000,
+  ) %&gt;% 
+  pivot_longer(
+    cols = c(&quot;female&quot;,&quot;male&quot;),names_to = &quot;gender&quot;, values_to = &quot;population&quot;
+  )
+
+population_london$age_group &lt;- factor(
+  population_london$age_group, 
+  levels = unique(population_london$age_group)
+)</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot(data = population_london) +
+  geom_ribbon(aes(x = age_group, ymin = 0, ymax = population, group = gender, fill = gender)) +
+  scale_fill_manual(
+    values = c(&quot;#ECA5A4&quot;, &quot;#89A4C0&quot;)
+  ) +
+  geom_text(x = 15, y = -450000, aes(label = year), size = 5) +
+  geom_text(data = dplyr::filter(population_london, age_group==&quot;0 to 4&quot;) %&gt;% 
+              mutate(
+                population_new = ifelse(population&lt;0,population-70000, population+70000),
+                label = paste0(gsub(pattern = &quot;(000)|(-)&quot;,replacement = &quot;&quot;, x = population),&quot;K&quot;)),
+    aes(x = as.numeric(age_group)+1.5, y = population_new, label = label, colour = gender)
+  ) +
+  scale_color_manual(
+    values = c(&quot;#ECA5A4&quot;, &quot;#89A4C0&quot;)
+  ) + 
+  scale_x_discrete(
+    labels = c(&quot;0 to 4 -&quot;,rep(&quot;&quot;,16),&quot;+85 -&quot;)
+  ) +
+  scale_y_continuous(
+    limits = c(-500000, 500000),
+    breaks = seq(from = -450000, to = 450000, by = 150000),
+    labels = paste0(seq(from = -450, to = 450, by = 150), &quot;K&quot;)
+  ) +
+  coord_flip() + 
+  facet_wrap(~ year, ncol = 3) +
+  theme_classic() +
+  labs(
+    title = &quot;The Population of London                           &quot;,
+    subtitle = &quot;Census data showing the number of Women and Men in London, split by age group&quot;,
+    caption = &quot;Design: Daniel Caroli  |  Data Source: visionofbritain.org.uk&quot;
+  ) +
+  xlab(&quot;&quot;) + ylab(&quot;&quot;) +
+  theme(
+    axis.ticks.y = element_blank(),
+    axis.text.y = element_text(hjust = 0),
+    strip.background = element_blank(),
+    strip.text.x = element_blank(),
+    legend.position = &quot;bottom&quot;,
+    panel.background = element_rect(fill = &quot;#E6E6E6&quot;, colour = &quot;NA&quot;),
+    panel.border = element_rect(colour = &quot;white&quot;, fill=NA, size=2),
+    axis.line = element_line(colour = &quot;white&quot;),
+    panel.spacing = unit(2, &quot;lines&quot;),
+    plot.title = element_text(size = 20, hjust = 0.5),
+    plot.subtitle = element_text(size = 10.5, hjust = 0.5),
+    plot.caption = element_text(hjust = 0.5)
+  )</code></pre>
+<p><img src="/dataviz-r/post/2019-11-12-male_female_london_files/figure-html/plot-1.png" width="1056" /></p>
+</div>

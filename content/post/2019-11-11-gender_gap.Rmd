@@ -2,10 +2,7 @@
 title: "Gender Gap"
 author: "Dinesh [dinesh@actifydatalabs.com]"
 date: '2019-11-11'
-tags:
-- R
-- Data Viz
-- ggplot
+tags: ["R", "Data Viz", "ggplot", "informationisbeautiful"]
 categories: R
 ---
   
@@ -24,7 +21,7 @@ The image below was published in Information is Beautiful.
 ### Data Preparation
   
   
-  Below is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+Below is the accompanying code to reproduce the chart above. The data was sourced from **US Bureau of Labor Statistics, UK Office of National Statistics, The Guardian Datablog**.
 
 ```{r data}
 library(ggplot2)

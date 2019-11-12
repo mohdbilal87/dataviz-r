@@ -6,10 +6,21 @@
     <description>Recent content on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 11 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 12 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Population of London</title>
+      <link>/dataviz-r/2019/11/12/population-of-london/</link>
+      <pubDate>Tue, 12 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/12/population-of-london/</guid>
+      <description>Original ImageThe image below was featured in Tableau Public Gallery. https://public.tableau.com/profile/daniel.caroli#!/vizhome/ThePopulationofLondon/Main
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was sourced from data export options in the link above.
+library(dplyr)library(tidyr)library(ggplot2)library(readr)library(janitor)population_london &amp;lt;- readr::read_csv(&amp;quot;./data/Adjusted_data.csv&amp;quot;) %&amp;gt;% clean_names() %&amp;gt;% select(age_group, label_position, female, calculation1, male, year) %&amp;gt;% mutate(female = gsub(pattern = &amp;quot;K&amp;quot;, replacement = &amp;quot;&amp;quot;, x = female) %&amp;gt;% as.</description>
+    </item>
     
     <item>
       <title>About</title>
@@ -27,7 +38,7 @@
       
       <guid>/dataviz-r/2019/11/11/gender-gap/</guid>
       <description>Original ImageThe image below was published in Information is Beautiful.https://informationisbeautiful.net/visualizations/gender-pay-gap/
-Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was sourced from US Bureau of Labor Statistics, UK Office of National Statistics, The Guardian Datablog.
 library(ggplot2)library(ggalt)library(dplyr)data &amp;lt;- readxl::read_xlsx(&amp;#39;./data/gender_gap.xlsx&amp;#39;, sheet = &amp;quot;US&amp;quot;) %&amp;gt;%janitor::clean_names()### Remove duplicates based on occupation without changing orderdata &amp;lt;- distinct(data,occupation, .keep_all= TRUE) %&amp;gt;% mutate(row_no = row_number())categories &amp;lt;- c(&amp;quot;admin &amp;amp; organisation&amp;quot;,&amp;quot;Care &amp;amp; education&amp;quot;,&amp;quot;Creative &amp;amp; media&amp;quot;,&amp;quot;Law &amp;amp; justice&amp;quot;,&amp;quot;Manual Work&amp;quot;,&amp;quot;Sales &amp;amp; serving others&amp;quot;,&amp;quot;Science, tech &amp;amp; engineering&amp;quot;,&amp;quot;Senior managers &amp;amp; execs&amp;quot;,&amp;quot;All occupations average&amp;quot;)data &amp;lt;- data %&amp;gt;% mutate(face = ifelse(occupation %in% categories,&amp;quot;bold&amp;quot;,&amp;quot;plain&amp;quot;),cut = ifelse(occupation %in% categories, nrow(data) + 1 - row_no ,NA))GGPLOT2ggplot(data, aes(x=women_average_annual_salary, xend=men_average_annual_salary, y=reorder(occupation,-row_no))) + geom_dumbbell(colour_x=&amp;quot;#752650&amp;quot;, color = &amp;quot;#b2b2b2&amp;quot;,colour_xend =&amp;quot;#c4cc80&amp;quot;,size = 1,size_x = 3.</description>
     </item>
     
