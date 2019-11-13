@@ -6,10 +6,21 @@
     <description>Recent content in informationisbeautiful on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 11 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 13 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/informationisbeautiful/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Rotten Tomatoes</title>
+      <link>/dataviz-r/2019/11/13/rotten-tomatoes/</link>
+      <pubDate>Wed, 13 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/13/rotten-tomatoes/</guid>
+      <description>Original ImageThe image below was featured in Information is Beatiful. https://informationisbeautiful.net/visualizations/star-wars-last-jedi-one-of-the-biggest-rotten-tomatoes-audience-vs-critics-score-splits-ever/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was sourced from data export options in the link above.
+library(ggplot2)library(ggrepel)library(dplyr)data &amp;lt;- read.csv(&amp;#39;./data/movies.csv&amp;#39;, stringsAsFactors = F) %&amp;gt;% janitor::clean_names() %&amp;gt;% filter(x_gap &amp;gt;= 15, genre %in% c(&amp;quot;Sci-fi / Fantasy&amp;quot;,&amp;quot;Thriller&amp;quot;,&amp;quot;horror&amp;quot;,&amp;quot;Horror&amp;quot;,&amp;quot;drama&amp;quot;,&amp;quot;Drama&amp;quot;,&amp;quot;comedy&amp;quot;,&amp;quot;Comedy&amp;quot;,&amp;quot;Action / Adventure&amp;quot;)) %&amp;gt;% mutate(year = year, budget_million = as.numeric(budget_million),radius = sqrt(budget_million/pi)) %&amp;gt;% filter(budget_million!</description>
+    </item>
     
     <item>
       <title>Gender Gap</title>

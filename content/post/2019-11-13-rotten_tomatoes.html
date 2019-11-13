@@ -1,0 +1,65 @@
+---
+title: "Rotten Tomatoes"
+author: "Dinesh [dinesh@actifydatalabs.com]"
+date: 2019-11-13
+categories: ["R"]
+tags: ["R", "Data Viz", "ggplot", "informationisbeautiful"]
+---
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was featured in Information is Beatiful. <a href="https://informationisbeautiful.net/visualizations/star-wars-last-jedi-one-of-the-biggest-rotten-tomatoes-audience-vs-critics-score-splits-ever/" class="uri">https://informationisbeautiful.net/visualizations/star-wars-last-jedi-one-of-the-biggest-rotten-tomatoes-audience-vs-critics-score-splits-ever/</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-13-rotten_tomatoes_files/images/movies.jpg" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was sourced from <strong>data export</strong> options in the link above.</p>
+<pre class="r"><code>library(ggplot2)
+library(ggrepel)
+library(dplyr)
+
+data &lt;- read.csv(&#39;./data/movies.csv&#39;, stringsAsFactors = F) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(x_gap &gt;= 15, genre %in% c(&quot;Sci-fi / Fantasy&quot;,&quot;Thriller&quot;,&quot;horror&quot;,&quot;Horror&quot;,&quot;drama&quot;,&quot;Drama&quot;,&quot;comedy&quot;,&quot;Comedy&quot;,&quot;Action / Adventure&quot;)) %&gt;% 
+  mutate(year = year, budget_million = as.numeric(budget_million),
+         radius = sqrt(budget_million/pi)) %&gt;% 
+  filter(budget_million!=0)</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot(data, aes(x = x_gap, y = year, size = budget_million)) +
+  geom_point(aes(colour = genre),shape=16, alpha = 1)  + 
+  scale_size_area(max_size = 22, guide = FALSE) + 
+  geom_text_repel(aes(y = year, label = film, colour = genre), size = 3, segment.color = NA) +
+  #geom_text_repel(aes(y = year - (radius/max(data$radius)), label = film, colour = genre), size = 3, segment.color = NA) + 
+  theme(plot.background = element_rect(fill = &quot;#333333&quot;, colour = &quot;#333333&quot;),
+        panel.background = element_rect(fill = &quot;#333333&quot;, colour = &quot;#333333&quot;),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_line(linetype = 3, colour = &quot;lightgrey&quot;),
+        panel.grid.minor.y = element_blank(),
+        plot.title = element_text(size = 20, colour = &quot;#c8c8c8&quot;, hjust = 0.5),
+        plot.subtitle = element_text(size = 15, colour = &quot;#c8c8c8&quot;, hjust = 0.5),
+        axis.text = element_text(size = 12, colour = &quot;#c8c8c8&quot;),
+        axis.line.x.bottom = element_line(arrow = arrow(length = unit(0.2,&quot;cm&quot;), type = &quot;closed&quot;), colour = &quot;#c8c8c8&quot;, size = 0.5),
+        axis.line.x.top = element_line(arrow = arrow(length = unit(0.2,&quot;cm&quot;), type = &quot;closed&quot;), colour = &quot;#c8c8c8&quot;, size = 0.5),
+        legend.position = c(0.25,-0.05),
+        legend.background=element_blank(),
+        legend.key = element_blank(),
+        legend.title = element_blank(),
+        plot.caption = element_text(size = 9, colour = &quot;#c8c8c8&quot;)
+        ) + 
+  scale_y_continuous(breaks = seq(2007,2017)) + 
+  scale_x_continuous(breaks = c(16,28,40),labels = c(&quot;16%&quot;,&quot;28%&quot;,&quot;40%&quot;), sec.axis = dup_axis(labels = NULL)) + 
+  scale_colour_manual(values = c(&quot;Comedy&quot; = &quot;#ffd500&quot;, &quot;Sci-fi / Fantasy&quot; = &quot;#8cf968&quot;, &quot;Action / Adventure&quot; = &quot;#f79227&quot;, &quot;Drama&quot; = &quot;#0cdcf8&quot;, &quot;Drama&quot; = &quot;#d58ce5&quot;,&quot;Thriller&quot; = &quot;#d58ce5&quot;, &quot;Horror&quot; = &quot;#999999&quot;), guide = guide_legend(nrow = 1)) + 
+  labs(title = &quot;Movies Critics Loved, But Audiences Really Didn&#39;t&quot;,
+       subtitle = &quot;% gap between audience &amp; critic &#39;rotten tomatoes&#39; score&quot;,
+       y = NULL, x = NULL,
+       caption = &quot;Source: RottenTomatoes.com  data: bit.ly/IIB_MovieLove  informationisbeautiful.net&quot;) + 
+  coord_cartesian(clip = &quot;off&quot;)</code></pre>
+<p><img src="/dataviz-r/post/2019-11-13-rotten_tomatoes_files/figure-html/plot-1.png" width="1056" /></p>
+</div>
