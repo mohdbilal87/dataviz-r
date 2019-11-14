@@ -6,10 +6,21 @@
     <description>Recent content in /r/dataisbeautiful on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 14 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/r/dataisbeautiful/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Municipalities in Spain by Population</title>
+      <link>/dataviz-r/2019/11/14/municipalities-in-spain-by-population/</link>
+      <pubDate>Thu, 14 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/14/municipalities-in-spain-by-population/</guid>
+      <description>Original ImageThe image below was published on reddit [/r/dataisbeautiful] by user /u/amunozo1. https://www.reddit.com/r/dataisbeautiful/comments/dswb9k/oc_municipalities_in_spain_by_population/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was shared by the user at their github repository. https://github.com/amunozo/population-by-municipalities.
+library(dplyr)library(readxl)library(ggplot2)library(janitor)spain_pop &amp;lt;- readxl::read_xls(path = &amp;quot;./data/listado-longitud-latitud-municipios-espana.xls&amp;quot;,skip = 2) %&amp;gt;% clean_names()GGPLOT2ggplot(data = spain_pop, aes(x=longitud,y=latitud,size=habitantes)) +geom_point(colour = &amp;quot;#cffdfd&amp;quot;, alpha = 0.5, shape = 19) +scale_size_area(max_size = 30) +theme_classic() + theme(panel.</description>
+    </item>
     
     <item>
       <title>500 Jump Scares</title>

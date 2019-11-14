@@ -1,0 +1,58 @@
+---
+title: "Municipalities in Spain by Population"
+author: "Bilal [bilal@actifydatalabs.com]"
+date: 2019-11-14
+categories: ["R"]
+tags: ["R", "Data Viz", "ggplot", "/r/dataisbeautiful"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
+```
+
+### Original Image
+
+
+The image below was published on reddit [/r/dataisbeautiful] by user /u/amunozo1. <https://www.reddit.com/r/dataisbeautiful/comments/dswb9k/oc_municipalities_in_spain_by_population/> 
+
+<p><img src="/dataviz-r/post/2019-11-14_spain_municipality_population_files/images/spain_municipality_population.png" width="1056" /></p>
+
+### Data Preparation
+
+Below is the accompanying code to reproduce the chart above. The data was shared by the user at their github repository. **https://github.com/amunozo/population-by-municipalities**.
+
+```{r data}
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(janitor)
+
+spain_pop <- readxl::read_xls(
+  path = "./data/listado-longitud-latitud-municipios-espana.xls",
+  skip = 2
+) %>% clean_names()
+```
+
+### GGPLOT2
+
+
+```{r plot, tidy=FALSE, fig.width=11, fig.height=9}
+ggplot(data = spain_pop, aes(x=longitud,y=latitud,size=habitantes)) +
+  geom_point(colour = "#cffdfd", alpha = 0.5, shape = 19) +
+  scale_size_area(max_size = 30) +
+  theme_classic() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    plot.title       = element_text(color = "lightgrey", hjust = 0.5, size = 20),
+    panel.background = element_rect(fill = "#000000"),
+    plot.background  = element_rect(fill = "#000000"),
+    legend.position  = "none",
+    axis.ticks       = element_blank(),
+    axis.text        = element_blank(),
+    axis.line        = element_blank()
+  ) + 
+  labs(title = "Municipalities in Spain by population", x= NULL, y = NULL) +
+  xlim(c(-10,max(spain_pop$longitud))) + 
+  ylim(c(35,max(spain_pop$latitud)))
+```

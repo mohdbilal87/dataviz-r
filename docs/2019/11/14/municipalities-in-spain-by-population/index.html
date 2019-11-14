@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Municipalities in Spain by Population | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Municipalities in Spain by Population</span></h1>
+<h2 class="author">Bilal [bilal@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/14</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was published on reddit [/r/dataisbeautiful] by user /u/amunozo1. <a href="https://www.reddit.com/r/dataisbeautiful/comments/dswb9k/oc_municipalities_in_spain_by_population/" class="uri">https://www.reddit.com/r/dataisbeautiful/comments/dswb9k/oc_municipalities_in_spain_by_population/</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-14_spain_municipality_population_files/images/spain_municipality_population.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was shared by the user at their github repository. <strong><a href="https://github.com/amunozo/population-by-municipalities" class="uri">https://github.com/amunozo/population-by-municipalities</a></strong>.</p>
+<pre class="r"><code>library(dplyr)
+library(readxl)
+library(ggplot2)
+library(janitor)
+
+spain_pop &lt;- readxl::read_xls(
+  path = &quot;./data/listado-longitud-latitud-municipios-espana.xls&quot;,
+  skip = 2
+) %&gt;% clean_names()</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot(data = spain_pop, aes(x=longitud,y=latitud,size=habitantes)) +
+  geom_point(colour = &quot;#cffdfd&quot;, alpha = 0.5, shape = 19) +
+  scale_size_area(max_size = 30) +
+  theme_classic() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    plot.title       = element_text(color = &quot;lightgrey&quot;, hjust = 0.5, size = 20),
+    panel.background = element_rect(fill = &quot;#000000&quot;),
+    plot.background  = element_rect(fill = &quot;#000000&quot;),
+    legend.position  = &quot;none&quot;,
+    axis.ticks       = element_blank(),
+    axis.text        = element_blank(),
+    axis.line        = element_blank()
+  ) + 
+  labs(title = &quot;Municipalities in Spain by population&quot;, x= NULL, y = NULL) +
+  xlim(c(-10,max(spain_pop$longitud))) + 
+  ylim(c(35,max(spain_pop$latitud)))</code></pre>
+<p><img src="/dataviz-r/post/2019-11-14_spain_municipality_population_files/figure-html/plot-1.png" width="1056" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+
