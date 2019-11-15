@@ -6,10 +6,21 @@
     <description>Recent content in Data Viz on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 14 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 15 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/data-viz/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>California Housing Problem</title>
+      <link>/dataviz-r/2019/11/15/california-housing-problem/</link>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/15/california-housing-problem/</guid>
+      <description>Original ImageThe image below was featured in BloomBerg. https://www.bloomberg.com/graphics/2019-california-housing-crisis/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data is obtained from the source mentioned in the image.
+library(ggplot2)library(dplyr)library(geofacet)library(grid)data &amp;lt;- read.csv(file = &amp;#39;./data/us_housing_burdened.csv&amp;#39;, stringsAsFactors = F) %&amp;gt;%janitor::clean_names() %&amp;gt;% mutate_at(.vars = c(&amp;quot;owner_burdened&amp;quot;,&amp;quot;renter_burdened&amp;quot;,&amp;quot;owner_per&amp;quot;,&amp;quot;renter_per&amp;quot;), .funs = function(x){gsub(&amp;quot;,&amp;quot;,&amp;quot;&amp;quot;,x)}) %&amp;gt;% mutate_at(.vars = c(&amp;quot;owner_burdened&amp;quot;,&amp;quot;renter_burdened&amp;quot;,&amp;quot;owner_per&amp;quot;,&amp;quot;renter_per&amp;quot;), .funs = as.numeric) %&amp;gt;% mutate(cost_burdened = (owner_burdened+renter_burdened)/((owner_burdened/owner_per)+(renter_burdened/renter_per)), label = state) %&amp;gt;% left_join(.</description>
+    </item>
     
     <item>
       <title>Municipalities in Spain by Population</title>
@@ -96,7 +107,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>

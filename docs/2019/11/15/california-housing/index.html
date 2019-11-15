@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>California Housing | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">California Housing</span></h1>
+<h2 class="author">Dinesh [dinesh@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/15</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was featured in BloomBerg. <a href="https://www.bloomberg.com/graphics/2019-california-housing-crisis/" class="uri">https://www.bloomberg.com/graphics/2019-california-housing-crisis/</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-15_california_housing_files/images/california_housing.jpg" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data is obtained from the source mentioned in the image.</p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(geofacet)
+library(grid)
+
+data &lt;- read.csv(file = &#39;./data/us_housing_burdened.csv&#39;, stringsAsFactors = F) %&gt;%
+  janitor::clean_names() %&gt;% 
+  mutate_at(.vars = c(&quot;owner_burdened&quot;,&quot;renter_burdened&quot;,&quot;owner_per&quot;,&quot;renter_per&quot;), .funs = function(x){gsub(&quot;,&quot;,&quot;&quot;,x)}) %&gt;% 
+  mutate_at(.vars = c(&quot;owner_burdened&quot;,&quot;renter_burdened&quot;,&quot;owner_per&quot;,&quot;renter_per&quot;), .funs = as.numeric) %&gt;% 
+  mutate(cost_burdened = (owner_burdened+renter_burdened)/((owner_burdened/owner_per)+(renter_burdened/renter_per)), label = state) %&gt;% 
+  left_join(., us_state_grid2, by = c(&quot;state&quot; = &quot;name&quot;)) %&gt;% 
+  mutate(color_cat = cut(cost_burdened, breaks = c(0,25,30,35,40,Inf), labels = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;)))
+  </code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>p &lt;- ggplot(data = data) + 
+  geom_rect(aes(fill = color_cat), 
+            xmin = 0, xmax = 1, ymin = 0, ymax = 1, 
+            alpha = 0.8) + 
+  geom_text(aes(x = 0.5, y = 0.5,label = code)) +
+  facet_geo(~state, grid = &quot;us_state_grid2&quot;) + 
+  scale_fill_manual(values = c(&quot;A&quot; = &quot;#fff117&quot;, &quot;B&quot; = &quot;#ffc100&quot;,&quot;C&quot; = &quot;#ff5500&quot;,&quot;D&quot; = &quot;#ff000e&quot;,&quot;E&quot; = &quot;#000000&quot;), 
+                    labels = c(&quot;25&quot;,&quot;30&quot;,&quot;35&quot;,&quot;40&quot;,&quot;&quot;)) + 
+  labs(title = &quot;Cost Burdened&quot;,
+       subtitle = &quot;For both owners and renters, California has the highest share of households spending more than\n30% of their income on housing&quot;,
+       x = NULL, y = NULL,
+       caption = &quot;Source: Harvard Joint Center for Housing Studies&quot;,
+       fill = &quot;Percentage of cost-burdened households&quot;) + 
+  theme_classic() + 
+  theme(panel.spacing = unit(0.05, &quot;cm&quot;),
+        legend.position = &quot;top&quot;,
+        legend.direction = &quot;horizontal&quot;,
+        legend.title = element_text(size = 9),
+        legend.key.width = unit(1, &quot;cm&quot;), 
+        legend.key.height = unit(0.2, &quot;cm&quot;),
+        legend.spacing.x  = unit(0,&quot;cm&quot;),
+        axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.line = element_blank(),
+        strip.background = element_blank(),
+        strip.text = element_blank(),
+        plot.caption = element_text(hjust = 0, size = 10),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 12)) + 
+  guides(fill = guide_legend(title.position = &quot;top&quot;, 
+                             title.hjust = 0.25,
+                             label.position=&quot;bottom&quot;,
+                             label.hjust = 1.25))
+  # )) + 
+  # annotate(&quot;text&quot;, x = 1, y = 5, label = &quot;41.6%\nof California households\nare cost-burdened&quot;)
+print(p)
+grid.text(label = &quot;46.1 %\nof California households\nare cost burdened&quot;,
+          x = 0.16, y = 0.18)</code></pre>
+<p><img src="/dataviz-r/post/2019-11-15_california_housing_files/figure-html/plot-1.png" width="1056" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+

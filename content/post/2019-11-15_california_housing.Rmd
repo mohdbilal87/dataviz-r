@@ -1,0 +1,83 @@
+---
+title: "California Housing Problem"
+author: "Dinesh [dinesh@actifydatalabs.com]"
+date: '2019-11-15'
+tags: ["R", "Data Viz", "ggplot", "bloomberg"]
+categories: R
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
+```
+
+### Original Image
+
+
+The image below was featured in BloomBerg. <https://www.bloomberg.com/graphics/2019-california-housing-crisis/> 
+
+<p><img src="/dataviz-r/post/2019-11-15_california_housing_files/images/california_housing.jpg" width="1056" /></p>
+
+### Data Preparation
+
+
+Below is the accompanying code to reproduce the chart above. The data is obtained from the source mentioned in the image.
+
+```{r data}
+library(ggplot2)
+library(dplyr)
+library(geofacet)
+library(grid)
+
+data <- read.csv(file = './data/us_housing_burdened.csv', stringsAsFactors = F) %>%
+  janitor::clean_names() %>% 
+  mutate_at(.vars = c("owner_burdened","renter_burdened","owner_per","renter_per"), .funs = function(x){gsub(",","",x)}) %>% 
+  mutate_at(.vars = c("owner_burdened","renter_burdened","owner_per","renter_per"), .funs = as.numeric) %>% 
+  mutate(cost_burdened = (owner_burdened+renter_burdened)/((owner_burdened/owner_per)+(renter_burdened/renter_per)), label = state) %>% 
+  left_join(., us_state_grid2, by = c("state" = "name")) %>% 
+  mutate(color_cat = cut(cost_burdened, breaks = c(0,25,30,35,40,Inf), labels = c("A","B","C","D","E")))
+  
+```
+
+### GGPLOT2
+
+
+```{r plot, tidy=FALSE, fig.width=11, fig.height=7}
+p <- ggplot(data = data) + 
+  geom_rect(aes(fill = color_cat), 
+            xmin = 0, xmax = 1, ymin = 0, ymax = 1, 
+            alpha = 0.8) + 
+  geom_text(aes(x = 0.5, y = 0.5,label = code)) +
+  facet_geo(~state, grid = "us_state_grid2") + 
+  scale_fill_manual(values = c("A" = "#fff117", "B" = "#ffc100","C" = "#ff5500","D" = "#ff000e","E" = "#000000"), 
+                    labels = c("25","30","35","40","")) + 
+  labs(title = "Cost Burdened",
+       subtitle = "For both owners and renters, California has the highest share of households spending more than\n30% of their income on housing",
+       x = NULL, y = NULL,
+       caption = "Source: Harvard Joint Center for Housing Studies",
+       fill = "Percentage of cost-burdened households") + 
+  theme_classic() + 
+  theme(panel.spacing = unit(0.05, "cm"),
+        legend.position = "top",
+        legend.direction = "horizontal",
+        legend.title = element_text(size = 9),
+        legend.key.width = unit(1, "cm"), 
+        legend.key.height = unit(0.2, "cm"),
+        legend.spacing.x  = unit(0,"cm"),
+        axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.line = element_blank(),
+        strip.background = element_blank(),
+        strip.text = element_blank(),
+        plot.caption = element_text(hjust = 0, size = 10),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 12)) + 
+  guides(fill = guide_legend(title.position = "top", 
+                             title.hjust = 0.25,
+                             label.position="bottom",
+                             label.hjust = 1.25))
+  # )) + 
+  # annotate("text", x = 1, y = 5, label = "41.6%\nof California households\nare cost-burdened")
+print(p)
+grid.text(label = "46.1 %\nof California households\nare cost burdened",
+          x = 0.16, y = 0.18)
+```
