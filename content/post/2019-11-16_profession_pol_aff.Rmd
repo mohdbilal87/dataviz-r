@@ -1,0 +1,79 @@
+---
+title: "Surgeons are Red, Psychiatrists are Blue"
+author: "Bilal [bilal@actifydatalabs.com]"
+date: 2019-11-16
+categories: ["R"]
+tags: ["R", "Data Viz", "ggplot", "NYT Graphics"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
+```
+
+### Original Image
+
+
+The image below was published in New York Times. <https://www.nytimes.com/2016/10/07/upshot/your-surgeon-is-probably-a-republican-your-psychiatrist-probably-a-democrat.html> 
+
+<p><img src="/dataviz-r/post/2019-11-16_profession_pol_aff_files/images/nytupshotpolaff.png" width="1056" /></p>
+
+### Data Preparation
+
+
+Below is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+
+```{r data}
+library(ggplot2)
+library(dplyr)
+library(cowplot)
+
+df_physician_affiliation <- data.frame(speciality = c("Surgery","Anesthesiology","Urology","ENT","Radiology","Ophthalmology","Physical/Rehab","Dermatology","Family medicine","Emergency","Cardiology","Gastroenterology","Pulmonary","Ob/Gyn","All doctors","Oncology","Nephrology","Pathology","Internal medicine","Neurology","Endocrinology","Geriatrics","Pediatrics","Psychiatry","Infectious disease"),republican = c(67,65,62,61,59,57,54,53,52,51,49,49,48,47,46,43,43,42,41,40,40,37,32,24,23)) %>% mutate(democrats = 100-republican)
+
+df_physician_affiliation <- df_physician_affiliation %>% reshape2::melt()
+df_physician_affiliation$speciality <- factor(df_physician_affiliation$speciality,levels = rev(c("Surgery","Anesthesiology","Urology","ENT","Radiology","Ophthalmology","Physical/Rehab","Dermatology","Family medicine","Emergency","Cardiology","Gastroenterology","Pulmonary","Ob/Gyn","All doctors","Oncology","Nephrology","Pathology","Internal medicine","Neurology","Endocrinology","Geriatrics","Pediatrics","Psychiatry","Infectious disease")))
+
+```
+
+### GGPLOT2
+
+
+```{r plot, tidy=FALSE, fig.width=9, fig.height=8}
+# Multi line Caption alignment using cowplot
+p <- ggplot(df_physician_affiliation) + 
+  geom_bar(stat = "identity", aes(x=speciality,y=value,fill=variable), 
+           position = position_stack(reverse = TRUE)
+  ) + 
+  scale_fill_manual(values = c("#D75C5C","#3989CB")) +
+  geom_text(
+    data = df_physician_affiliation[1:25,],aes(x=speciality,y=value-3,label=paste0(value,"%")),
+    color = "white"
+  ) +
+  coord_flip() +
+  xlab("") + ylab("") +
+  theme_classic() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.border = element_blank(),
+    axis.text.y = element_text(hjust=0,face=c(rep("plain",10),"bold",rep("plain",15))),
+    axis.ticks.y = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank(),
+    plot.title = element_text(hjust = -0.24),
+    plot.subtitle = element_text(hjust = -0.36),
+    # plot.margin = unit(c(2,6,2,2), "lines"),
+    legend.position="none",
+    axis.line = element_blank(),
+    aspect.ratio = 0.85
+  ) + 
+  labs(
+    title = "Surgeons are Red, Psychiatrists are Blue",
+    subtitle = "Percent of doctors who have a party registration who are Republicans.\n"
+  )
+
+p1 <- add_sub(p,"Data from a sampe of 34,532 physicians in 29 states.",hjust=1.97,colour = "grey", size = 7.5)
+p2 <- add_sub(p1,"Source: Analysis of the National Provider Identifier File, and Catalist LLc voter file data, by Eitan Hersh and Matthew Goldenberg.",hjust=0.82,colour = "grey", size = 7.5)
+ggdraw(p2)
+
+
+```

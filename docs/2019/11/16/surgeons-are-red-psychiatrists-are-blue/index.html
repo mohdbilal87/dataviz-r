@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Surgeons are Red, Psychiatrists are Blue | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Surgeons are Red, Psychiatrists are Blue</span></h1>
+<h2 class="author">Bilal [bilal@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/16</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was published in New York Times. <a href="https://www.nytimes.com/2016/10/07/upshot/your-surgeon-is-probably-a-republican-your-psychiatrist-probably-a-democrat.html" class="uri">https://www.nytimes.com/2016/10/07/upshot/your-surgeon-is-probably-a-republican-your-psychiatrist-probably-a-democrat.html</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-16_profession_pol_aff_files/images/nytupshotpolaff.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.</p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(cowplot)
+
+df_physician_affiliation &lt;- data.frame(speciality = c(&quot;Surgery&quot;,&quot;Anesthesiology&quot;,&quot;Urology&quot;,&quot;ENT&quot;,&quot;Radiology&quot;,&quot;Ophthalmology&quot;,&quot;Physical/Rehab&quot;,&quot;Dermatology&quot;,&quot;Family medicine&quot;,&quot;Emergency&quot;,&quot;Cardiology&quot;,&quot;Gastroenterology&quot;,&quot;Pulmonary&quot;,&quot;Ob/Gyn&quot;,&quot;All doctors&quot;,&quot;Oncology&quot;,&quot;Nephrology&quot;,&quot;Pathology&quot;,&quot;Internal medicine&quot;,&quot;Neurology&quot;,&quot;Endocrinology&quot;,&quot;Geriatrics&quot;,&quot;Pediatrics&quot;,&quot;Psychiatry&quot;,&quot;Infectious disease&quot;),republican = c(67,65,62,61,59,57,54,53,52,51,49,49,48,47,46,43,43,42,41,40,40,37,32,24,23)) %&gt;% mutate(democrats = 100-republican)
+
+df_physician_affiliation &lt;- df_physician_affiliation %&gt;% reshape2::melt()
+df_physician_affiliation$speciality &lt;- factor(df_physician_affiliation$speciality,levels = rev(c(&quot;Surgery&quot;,&quot;Anesthesiology&quot;,&quot;Urology&quot;,&quot;ENT&quot;,&quot;Radiology&quot;,&quot;Ophthalmology&quot;,&quot;Physical/Rehab&quot;,&quot;Dermatology&quot;,&quot;Family medicine&quot;,&quot;Emergency&quot;,&quot;Cardiology&quot;,&quot;Gastroenterology&quot;,&quot;Pulmonary&quot;,&quot;Ob/Gyn&quot;,&quot;All doctors&quot;,&quot;Oncology&quot;,&quot;Nephrology&quot;,&quot;Pathology&quot;,&quot;Internal medicine&quot;,&quot;Neurology&quot;,&quot;Endocrinology&quot;,&quot;Geriatrics&quot;,&quot;Pediatrics&quot;,&quot;Psychiatry&quot;,&quot;Infectious disease&quot;)))</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code># Multi line Caption alignment using cowplot
+p &lt;- ggplot(df_physician_affiliation) + 
+  geom_bar(stat = &quot;identity&quot;, aes(x=speciality,y=value,fill=variable), 
+           position = position_stack(reverse = TRUE)
+  ) + 
+  scale_fill_manual(values = c(&quot;#D75C5C&quot;,&quot;#3989CB&quot;)) +
+  geom_text(
+    data = df_physician_affiliation[1:25,],aes(x=speciality,y=value-3,label=paste0(value,&quot;%&quot;)),
+    color = &quot;white&quot;
+  ) +
+  coord_flip() +
+  xlab(&quot;&quot;) + ylab(&quot;&quot;) +
+  theme_classic() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.border = element_blank(),
+    axis.text.y = element_text(hjust=0,face=c(rep(&quot;plain&quot;,10),&quot;bold&quot;,rep(&quot;plain&quot;,15))),
+    axis.ticks.y = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank(),
+    plot.title = element_text(hjust = -0.24),
+    plot.subtitle = element_text(hjust = -0.36),
+    # plot.margin = unit(c(2,6,2,2), &quot;lines&quot;),
+    legend.position=&quot;none&quot;,
+    axis.line = element_blank(),
+    aspect.ratio = 0.85
+  ) + 
+  labs(
+    title = &quot;Surgeons are Red, Psychiatrists are Blue&quot;,
+    subtitle = &quot;Percent of doctors who have a party registration who are Republicans.\n&quot;
+  )
+
+p1 &lt;- add_sub(p,&quot;Data from a sampe of 34,532 physicians in 29 states.&quot;,hjust=1.97,colour = &quot;grey&quot;, size = 7.5)
+p2 &lt;- add_sub(p1,&quot;Source: Analysis of the National Provider Identifier File, and Catalist LLc voter file data, by Eitan Hersh and Matthew Goldenberg.&quot;,hjust=0.82,colour = &quot;grey&quot;, size = 7.5)
+ggdraw(p2)</code></pre>
+<p><img src="/dataviz-r/post/2019-11-16_profession_pol_aff_files/figure-html/plot-1.png" width="864" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+

@@ -6,24 +6,15 @@
     <description>Recent content in Tags on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 15 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 16 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>bloomberg</title>
-      <link>/dataviz-r/tags/bloomberg/</link>
-      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/dataviz-r/tags/bloomberg/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Data Viz</title>
       <link>/dataviz-r/tags/data-viz/</link>
-      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/tags/data-viz/</guid>
       <description></description>
@@ -32,18 +23,36 @@
     <item>
       <title>ggplot</title>
       <link>/dataviz-r/tags/ggplot/</link>
-      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/tags/ggplot/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>NYT Graphics</title>
+      <link>/dataviz-r/tags/nyt-graphics/</link>
+      <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/tags/nyt-graphics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>R</title>
       <link>/dataviz-r/tags/r/</link>
-      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bloomberg</title>
+      <link>/dataviz-r/tags/bloomberg/</link>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/tags/bloomberg/</guid>
       <description></description>
     </item>
     
@@ -80,15 +89,6 @@
       <pubDate>Fri, 08 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/dataviz-r/tags/538-graphics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>NYT Graphics</title>
-      <link>/dataviz-r/tags/nyt-graphics/</link>
-      <pubDate>Thu, 07 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/dataviz-r/tags/nyt-graphics/</guid>
       <description></description>
     </item>
     

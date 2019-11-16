@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 15 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 16 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Surgeons are Red, Psychiatrists are Blue</title>
+      <link>/dataviz-r/2019/11/16/surgeons-are-red-psychiatrists-are-blue/</link>
+      <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/16/surgeons-are-red-psychiatrists-are-blue/</guid>
+      <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/2016/10/07/upshot/your-surgeon-is-probably-a-republican-your-psychiatrist-probably-a-democrat.html
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+library(ggplot2)library(dplyr)library(cowplot)df_physician_affiliation &amp;lt;- data.frame(speciality = c(&amp;quot;Surgery&amp;quot;,&amp;quot;Anesthesiology&amp;quot;,&amp;quot;Urology&amp;quot;,&amp;quot;ENT&amp;quot;,&amp;quot;Radiology&amp;quot;,&amp;quot;Ophthalmology&amp;quot;,&amp;quot;Physical/Rehab&amp;quot;,&amp;quot;Dermatology&amp;quot;,&amp;quot;Family medicine&amp;quot;,&amp;quot;Emergency&amp;quot;,&amp;quot;Cardiology&amp;quot;,&amp;quot;Gastroenterology&amp;quot;,&amp;quot;Pulmonary&amp;quot;,&amp;quot;Ob/Gyn&amp;quot;,&amp;quot;All doctors&amp;quot;,&amp;quot;Oncology&amp;quot;,&amp;quot;Nephrology&amp;quot;,&amp;quot;Pathology&amp;quot;,&amp;quot;Internal medicine&amp;quot;,&amp;quot;Neurology&amp;quot;,&amp;quot;Endocrinology&amp;quot;,&amp;quot;Geriatrics&amp;quot;,&amp;quot;Pediatrics&amp;quot;,&amp;quot;Psychiatry&amp;quot;,&amp;quot;Infectious disease&amp;quot;),republican = c(67,65,62,61,59,57,54,53,52,51,49,49,48,47,46,43,43,42,41,40,40,37,32,24,23)) %&amp;gt;% mutate(democrats = 100-republican)df_physician_affiliation &amp;lt;- df_physician_affiliation %&amp;gt;% reshape2::melt()df_physician_affiliation$speciality &amp;lt;- factor(df_physician_affiliation$speciality,levels = rev(c(&amp;quot;Surgery&amp;quot;,&amp;quot;Anesthesiology&amp;quot;,&amp;quot;Urology&amp;quot;,&amp;quot;ENT&amp;quot;,&amp;quot;Radiology&amp;quot;,&amp;quot;Ophthalmology&amp;quot;,&amp;quot;Physical/Rehab&amp;quot;,&amp;quot;Dermatology&amp;quot;,&amp;quot;Family medicine&amp;quot;,&amp;quot;Emergency&amp;quot;,&amp;quot;Cardiology&amp;quot;,&amp;quot;Gastroenterology&amp;quot;,&amp;quot;Pulmonary&amp;quot;,&amp;quot;Ob/Gyn&amp;quot;,&amp;quot;All doctors&amp;quot;,&amp;quot;Oncology&amp;quot;,&amp;quot;Nephrology&amp;quot;,&amp;quot;Pathology&amp;quot;,&amp;quot;Internal medicine&amp;quot;,&amp;quot;Neurology&amp;quot;,&amp;quot;Endocrinology&amp;quot;,&amp;quot;Geriatrics&amp;quot;,&amp;quot;Pediatrics&amp;quot;,&amp;quot;Psychiatry&amp;quot;,&amp;quot;Infectious disease&amp;quot;)))GGPLOT2# Multi line Caption alignment using cowplotp &amp;lt;- ggplot(df_physician_affiliation) + geom_bar(stat = &amp;quot;identity&amp;quot;, aes(x=speciality,y=value,fill=variable), position = position_stack(reverse = TRUE)) + scale_fill_manual(values = c(&amp;quot;#D75C5C&amp;quot;,&amp;quot;#3989CB&amp;quot;)) +geom_text(data = df_physician_affiliation[1:25,],aes(x=speciality,y=value-3,label=paste0(value,&amp;quot;%&amp;quot;)),color = &amp;quot;white&amp;quot;) +coord_flip() +xlab(&amp;quot;&amp;quot;) + ylab(&amp;quot;&amp;quot;) +theme_classic() +theme(panel.</description>
+    </item>
     
     <item>
       <title>California Housing Problem</title>
@@ -107,7 +118,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>
