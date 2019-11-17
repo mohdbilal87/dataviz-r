@@ -6,10 +6,21 @@
     <description>Recent content on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 16 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 17 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>UK EU Uncertainity</title>
+      <link>/dataviz-r/2019/11/17/uk-eu-uncertainity/</link>
+      <pubDate>Sun, 17 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/17/uk-eu-uncertainity/</guid>
+      <description>Original ImageThe image below was featured in Tableau Public Gallery. https://public.tableau.com/en-us/gallery/uk-and-eu-uncertainty-index?tab=viz-of-the-day&amp;amp;type=viz-of-the-day
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data is downloaded from the source mentioned in the caption of image.
+library(ggplot2)library(dplyr)library(ggrepel)data &amp;lt;- readxl::read_xlsx(&amp;#39;./data/Europe_Policy_Uncertainty_Data.xlsx&amp;#39;) %&amp;gt;%janitor::clean_names() %&amp;gt;% select(c(&amp;quot;year&amp;quot;,&amp;quot;month&amp;quot;,&amp;quot;european_news_index&amp;quot;,&amp;quot;uk_news_index&amp;quot;)) %&amp;gt;% mutate(date = paste0(year,&amp;quot;-&amp;quot;,month,&amp;quot;-&amp;quot;,&amp;quot;01&amp;quot;), date = as.Date(date)) %&amp;gt;% filter(!is.na(uk_news_index),!is.na(european_news_index)) %&amp;gt;% select(c(&amp;quot;date&amp;quot;,&amp;quot;european_news_index&amp;quot;,&amp;quot;uk_news_index&amp;quot;))data_long &amp;lt;- data %&amp;gt;% tidyr::pivot_longer(-date, names_to = &amp;quot;type&amp;quot;, values_to = &amp;quot;index_value&amp;quot;) %&amp;gt;% mutate(text_label = case_when(date == &amp;#39;1997-05-01&amp;#39; &amp;amp; type == &amp;#39;uk_news_index&amp;#39; ~ &amp;#39;May 1977\nTONY BLAIR\nTOOK OFFICE AS\nPRIME MINISTER&amp;#39;,date == &amp;#39;2007-06-01&amp;#39; &amp;amp; type == &amp;#39;uk_news_index&amp;#39; ~ &amp;#39;June 2007\nGORDON BROWN\nTOOK OFFICE AS\nPRIME MINISTER&amp;#39;,date == &amp;#39;2010-04-01&amp;#39; &amp;amp; type == &amp;#39;uk_news_index&amp;#39; ~ &amp;#39;April 2010\nDAVID CAMERON\nTOOK OFFICE AS\nPRIME MINISTER&amp;#39;,date == &amp;#39;2016-07-01&amp;#39; &amp;amp; type == &amp;#39;uk_news_index&amp;#39; ~ &amp;#39;July 2016\nTHERESA MAY\nTOOK OFFICE AS\nPRIME MINISTER&amp;#39;,date == &amp;#39;2019-07-01&amp;#39; &amp;amp; type == &amp;#39;uk_news_index&amp;#39; ~ &amp;#39;July 2019\nBAFFOON JOHNSON\nTOOK OFFICE AS\nPRIME MINISTER&amp;#39;))GGPLOT2ggplot(data = data_long, aes(x = date, y = index_value, colour = type)) + geom_step(size = 1) + geom_text_repel(aes(label = text_label), direction = &amp;quot;x&amp;quot;, segment.</description>
+    </item>
     
     <item>
       <title>Surgeons are Red, Psychiatrists are Blue</title>
@@ -127,7 +138,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>

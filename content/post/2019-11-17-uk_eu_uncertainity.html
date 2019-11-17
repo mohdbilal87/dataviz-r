@@ -1,0 +1,65 @@
+---
+title: "UK EU Uncertainity"
+author: "Dinesh [dinesh@actifydatalabs.com]"
+date: '2019-11-17'
+tags: ["R", "Data Viz", "ggplot", "tableau"]
+categories: R
+---
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was featured in Tableau Public Gallery. <a href="https://public.tableau.com/en-us/gallery/uk-and-eu-uncertainty-index?tab=viz-of-the-day&amp;type=viz-of-the-day" class="uri">https://public.tableau.com/en-us/gallery/uk-and-eu-uncertainty-index?tab=viz-of-the-day&amp;type=viz-of-the-day</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-17-uk_eu_uncertainity_files/images/uk_eu_uncertainity.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data is downloaded from the source mentioned in the caption of image.</p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(ggrepel)
+
+data &lt;- readxl::read_xlsx(&#39;./data/Europe_Policy_Uncertainty_Data.xlsx&#39;) %&gt;%
+  janitor::clean_names() %&gt;% 
+  select(c(&quot;year&quot;,&quot;month&quot;,&quot;european_news_index&quot;,&quot;uk_news_index&quot;)) %&gt;% 
+  mutate(date = paste0(year,&quot;-&quot;,month,&quot;-&quot;,&quot;01&quot;), date = as.Date(date)) %&gt;% 
+  filter(!is.na(uk_news_index),!is.na(european_news_index)) %&gt;% 
+  select(c(&quot;date&quot;,&quot;european_news_index&quot;,&quot;uk_news_index&quot;))
+
+data_long &lt;- data %&gt;% 
+  tidyr::pivot_longer(-date, names_to = &quot;type&quot;, values_to = &quot;index_value&quot;) %&gt;% 
+  mutate(text_label = case_when(
+    date == &#39;1997-05-01&#39; &amp; type == &#39;uk_news_index&#39; ~ &#39;May 1977\nTONY BLAIR\nTOOK OFFICE AS\nPRIME MINISTER&#39;,
+    date == &#39;2007-06-01&#39; &amp; type == &#39;uk_news_index&#39; ~ &#39;June 2007\nGORDON BROWN\nTOOK OFFICE AS\nPRIME MINISTER&#39;,
+        date == &#39;2010-04-01&#39; &amp; type == &#39;uk_news_index&#39; ~ &#39;April 2010\nDAVID CAMERON\nTOOK OFFICE AS\nPRIME MINISTER&#39;,
+    date == &#39;2016-07-01&#39; &amp; type == &#39;uk_news_index&#39; ~ &#39;July 2016\nTHERESA MAY\nTOOK OFFICE AS\nPRIME MINISTER&#39;,
+        date == &#39;2019-07-01&#39; &amp; type == &#39;uk_news_index&#39; ~ &#39;July 2019\nBAFFOON JOHNSON\nTOOK OFFICE AS\nPRIME MINISTER&#39;
+  ))</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot(data = data_long, aes(x = date, y = index_value, colour = type)) + 
+  geom_step(size = 1) + 
+  geom_text_repel(aes(label = text_label), direction = &quot;x&quot;, segment.colour = &quot;lightgray&quot;, nudge_y = 450, colour = &quot;black&quot;) + 
+  geom_smooth(method = &quot;loess&quot;, se = FALSE, linetype = &quot;dashed&quot;, 
+              size = 0.75, span = 0.6) + 
+  scale_color_manual(values = c(&quot;european_news_index&quot; = &quot;grey&quot;,&quot;uk_news_index&quot; = &quot;red&quot;)) + 
+  scale_y_continuous(breaks = seq(0,1200,200),limits = c(0,1200)) + 
+  scale_x_date(date_breaks = &quot;2 years&quot;, date_labels = &quot;%Y&quot;) + 
+  theme_classic() + 
+  coord_cartesian(clip = &quot;off&quot;) + 
+  theme(legend.position = &quot;none&quot;,
+        plot.title = element_text(size = 20, colour = &quot;#778899&quot;),
+        plot.subtitle = element_text(size = 15, colour = &quot;#778899&quot;),
+        axis.ticks = element_blank(),
+        axis.line = element_line(colour = &quot;lightgray&quot;,size = 0.01),
+        plot.caption = element_text(hjust = 0)) + 
+  labs(title = &quot;HOW UNCERTAIN IS ECONOMIC POLICY\nIN THE UK AND EUROPE 1997-2019&quot;,
+       subtitle = &quot;\nEUROPEAN ECONOMIC POLICY UNCERTAINTY NEWS INDEX\nThe INDEX utilises the number of news articles containing the terms uncertain or uncertainty, economic or economy, as well as\npolicy relevant terms (scaled by the smoothed total number of articles). Policy relevant terms include: &#39;policy&#39;, &#39;tax&#39;,\n&#39;spending&#39;,&#39;regulation&#39;, &#39;Bank of England&#39;, &#39;budget&#39;, and &#39;deficit&#39;&quot;,
+       x = &quot;YEAR&quot;, y = &quot;UNCERTAINITY INDEX&quot;,
+       caption =&quot; SOURCE:                                                                                                   SOURCE ACCREDITATION: Source: &#39;Measuring Economic Policy Uncertainity&#39; by                    \n https://www.policyuncertainty.com/europe_monthly.html                          Scott R. Baker, Nicholas Bloom and Steven J. Davis at www.PolicyUncertainity.com.&quot; )</code></pre>
+<p><img src="/dataviz-r/post/2019-11-17-uk_eu_uncertainity_files/figure-html/plot-1.png" width="1056" /></p>
+</div>
