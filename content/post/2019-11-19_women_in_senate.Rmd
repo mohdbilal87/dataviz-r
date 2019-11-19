@@ -1,0 +1,79 @@
+---
+title: "Women in Senate"
+author: "Bilal [bilal@actifydatalabs.com]"
+date: 2019-11-19
+categories: ["R"]
+tags: ["R", "Data Viz", "ggplot", "NYT Graphics"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
+```
+
+### Original Image
+
+
+The image below was published in New York Times. <https://archive.nytimes.com/www.nytimes.com/interactive/2013/03/22/us/politics/women-in-the-senate.html> 
+
+<p><img src="/dataviz-r/post/2019-11-19_women_in_senate_files/images/women_in_senate_nyt.png" width="1056" /></p>
+
+### Data Preparation
+
+
+Below is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+
+```{r data}
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+us_sen <- read_csv("./data/final_data_us_sen.csv")
+
+female_sen_list <- c("Rebecca Latimer Felton","Hattie Caraway","Rose McConnell Long","Dixie Bibb Graves","Gladys Pyle","Vera C. Bushfield","Margaret Chase Smith","Eva Bowring","Hazel Abel","Maurine Brown Neuberger","Elaine S. Edwards","Nancy Landon Kassebaum","Maryon Pittman Allen","Muriel Humphrey","Paula Hawkins","Mikulski, BarbaraBarbara Mikulski","Feinstein, DianneDianne Feinstein","Jocelyn Birch Burdick","Murray, PattyPatty Murray","Carol Moseley-Braun","Kay Bailey Hutchison","Boxer, BarbaraBarbara Boxer","Olympia Snowe","Sheila Frahm","Mary Landrieu","Collins, SusanSusan Collins","Blanche Lincoln","Cantwell, MariaMaria Cantwell","Stabenow, DebbieDebbie Stabenow","Hillary Clinton","Jean Carnahan","Murkowski, LisaLisa Murkowski","Elizabeth Dole","Klobuchar, AmyAmy Klobuchar","McCaskill, ClaireClaire McCaskill","Gillibrand, KirstenKirsten Gillibrand","Kay Hagan","Shaheen, JeanneJeanne Shaheen","Ayotte, KellyKelly Ayotte","Heitkamp, HeidiHeidi Heitkamp","Fischer, DebDeb Fischer","Warren, ElizabethElizabeth Warren","Baldwin, TammyTammy Baldwin","Hirono, MazieMazie Hirono")
+us_sen_femal <- dplyr::filter(us_sen, tolower(Senator) %in% tolower(female_sen_list))
+
+# it seems that the table with current us senators have name duplicated while scraping
+us_sen_femal$Senator <- ifelse(grepl(",",us_sen_femal$Senator),sub('.*,\\s*', '', us_sen_femal$Senator) %>% substr(.,nchar(gsub("([A-Za-z]+).*", "\\1",.))/2+1,nchar(us_sen_femal$Senator)),us_sen_femal$Senator)
+us_sen_femal$Senator <- ifelse(us_sen_femal$Senator %in% c("Rebecca Latimer Felton","Rose McConnell Long","Dixie Bibb Graves","Vera C. Bushfield","Eva Bowring","Elaine S. Edwards","Maryon Pittman Allen","Muriel Humphrey","Jocelyn Birch Burdick","Sheila Frahm","Jean Carnahan"),paste0("* ",us_sen_femal$Senator),us_sen_femal$Senator)
+us_sen_femal$Years <- ifelse(nchar(us_sen_femal$Years)<9,paste0(us_sen_femal$Years,"-",us_sen_femal$Years),ifelse(nchar(us_sen_femal$Years)>9,paste0(stringr::str_sub(us_sen_femal$Years,-4),"-","2013"),us_sen_femal$Years))
+
+us_sen_femal <- us_sen_femal %>% mutate(start_year = as.numeric(as.character(substr(Years,1,4))),end_year = as.numeric(as.character(stringr::str_sub(Years,-4))),end_year = ifelse(end_year>=2013,2013,end_year), duration = ifelse(start_year==end_year,end_year - start_year + 1,end_year - start_year)) %>% select(-Years) 
+us_sen_femal$duration <- ifelse(us_sen_femal$Senator %in% c("* Rebecca Latimer Felton","* Vera C. Bushfield","* Eva Bowring","Hazel Abel","* Elaine S. Edwards","* Maryon Pittman Allen","* Muriel Humphrey","* Jocelyn Birch Burdick","* Sheila Frahm","Heidi Heitkamp","Deb Fischer","Elizabeth Warren","Tammy Baldwin","Mazie Hirono"),0.2,us_sen_femal$duration)
+
+us_sen_femal$Senator <- factor(us_sen_femal$Senator,levels = c("* Rebecca Latimer Felton","Hattie Caraway","* Rose McConnell Long","* Dixie Bibb Graves","Gladys Pyle","* Vera C. Bushfield","Margaret Chase Smith","* Eva Bowring","Hazel Abel","Maurine Brown Neuberger","* Elaine S. Edwards","Nancy Landon Kassebaum","* Maryon Pittman Allen","* Muriel Humphrey","Paula Hawkins","Barbara Mikulski","Dianne Feinstein","* Jocelyn Birch Burdick","Patty Murray","Carol Moseley-Braun","Kay Bailey Hutchison","Barbara Boxer","Olympia Snowe","* Sheila Frahm","Mary Landrieu","Susan Collins","Blanche Lincoln","Maria Cantwell","Debbie Stabenow","Hillary Clinton","* Jean Carnahan","Lisa Murkowski","Elizabeth Dole","Amy Klobuchar","Claire McCaskill","Kirsten Gillibrand","Kay Hagan","Jeanne Shaheen","Kelly Ayotte","Heidi Heitkamp","Deb Fischer","Elizabeth Warren","Tammy Baldwin","Mazie Hirono")) # in order of their being appointed/selected.
+
+```
+
+### GGPLOT2
+
+
+```{r plot, tidy=FALSE, fig.width=11, fig.height=11}
+ggplot(us_sen_femal) +     # the data frame
+  geom_tile(aes(x=ifelse(start_year==2013,2013-0.1,start_year+duration/2),y=Senator,width=duration,fill=Party)) + # for floating bars of common height
+  scale_fill_manual(values=c("#91B5D2","#FF6868")) + # colors as per nyt chart
+  theme_bw() + # set theme to bw
+  theme(
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y= element_blank(),
+    panel.border = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(face="bold", size = 15),
+    plot.subtitle = element_text(size = 8, margin=margin(0,0,30,0)),
+    plot.margin=unit(c(1.5,5,1.5,1.5),"cm"),
+    legend.position="none"
+  ) + # styling
+  geom_text(aes(x=start_year-6,y=Senator,label=Senator),size=2) + # senator name alongside bars
+  xlab("") + ylab("") + # no x and y labels
+  labs(title = "Women in the Senate", subtitle = "Only 44 women have served in the history of the Senate, and many of them had very brief terms.\nTwenty women are current senators.") +
+  scale_x_continuous(breaks = seq(1910,2010,20), sec.axis = dup_axis()) + # place years on top x axis as well
+  geom_vline(xintercept=seq(1910,2010,20),linetype="dotted",size=0.2,color="grey") + # vertical dotted lines
+  geom_hline(yintercept=seq(1.5,43.5,1),linetype="dotted",size=0.2,color="grey") + # horizontal dotted lines
+  annotate("text", label = "* Appointed\nAppointed refers to women\nwho were never elected,\nseveral appointed members were also\nelected to later terms.", x = 1932, y = 40, size = 2.5, colour = "black",hjust = 0) + # annotation 1
+  annotate("text", label = "Hillary Rodham Clinton\nhas a longer senate\ncareer than half of\nthe other female\nsenators.", x = 1965, y = 35, size = 2.5, colour = "black",hjust=0) + 
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = data.frame(x1=1977, x2=1993, y1=35, y2=30), color = "grey") + #annotation 2
+  annotate("text", label = "Senators Feinstein, Boxer\nand Murray were elected\nin 1992, and now lead\ncomittees.", x = 1978, y = 20, size = 2.5, colour = "black",hjust=1) + geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = data.frame(x1=rep(1980,5),x2=c(1985,1978,1985,1984,1980),y1=c(22,21,19,17,22),y2=c(22,21,19,17,17)),color = "grey") + #annotation 3
+  annotate("text", label = "The widow of a senator\nwho died in office was often\nappointed to serve\ntemporarily.", x = 1956, y = 16, size = 2.5, colour = "black",hjust=0) + geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = data.frame(x1=1963,x2=1970,y1=15.5,y2=14),color = "grey") #annotation 4
+```

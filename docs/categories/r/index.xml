@@ -6,10 +6,21 @@
     <description>Recent content in R on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Women in Senate</title>
+      <link>/dataviz-r/2019/11/19/women-in-senate/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/19/women-in-senate/</guid>
+      <description>Original ImageThe image below was published in New York Times. https://archive.nytimes.com/www.nytimes.com/interactive/2013/03/22/us/politics/women-in-the-senate.html
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+library(dplyr)library(ggplot2)library(readr)us_sen &amp;lt;- read_csv(&amp;quot;./data/final_data_us_sen.csv&amp;quot;)female_sen_list &amp;lt;- c(&amp;quot;Rebecca Latimer Felton&amp;quot;,&amp;quot;Hattie Caraway&amp;quot;,&amp;quot;Rose McConnell Long&amp;quot;,&amp;quot;Dixie Bibb Graves&amp;quot;,&amp;quot;Gladys Pyle&amp;quot;,&amp;quot;Vera C. Bushfield&amp;quot;,&amp;quot;Margaret Chase Smith&amp;quot;,&amp;quot;Eva Bowring&amp;quot;,&amp;quot;Hazel Abel&amp;quot;,&amp;quot;Maurine Brown Neuberger&amp;quot;,&amp;quot;Elaine S. Edwards&amp;quot;,&amp;quot;Nancy Landon Kassebaum&amp;quot;,&amp;quot;Maryon Pittman Allen&amp;quot;,&amp;quot;Muriel Humphrey&amp;quot;,&amp;quot;Paula Hawkins&amp;quot;,&amp;quot;Mikulski, BarbaraBarbara Mikulski&amp;quot;,&amp;quot;Feinstein, DianneDianne Feinstein&amp;quot;,&amp;quot;Jocelyn Birch Burdick&amp;quot;,&amp;quot;Murray, PattyPatty Murray&amp;quot;,&amp;quot;Carol Moseley-Braun&amp;quot;,&amp;quot;Kay Bailey Hutchison&amp;quot;,&amp;quot;Boxer, BarbaraBarbara Boxer&amp;quot;,&amp;quot;Olympia Snowe&amp;quot;,&amp;quot;Sheila Frahm&amp;quot;,&amp;quot;Mary Landrieu&amp;quot;,&amp;quot;Collins, SusanSusan Collins&amp;quot;,&amp;quot;Blanche Lincoln&amp;quot;,&amp;quot;Cantwell, MariaMaria Cantwell&amp;quot;,&amp;quot;Stabenow, DebbieDebbie Stabenow&amp;quot;,&amp;quot;Hillary Clinton&amp;quot;,&amp;quot;Jean Carnahan&amp;quot;,&amp;quot;Murkowski, LisaLisa Murkowski&amp;quot;,&amp;quot;Elizabeth Dole&amp;quot;,&amp;quot;Klobuchar, AmyAmy Klobuchar&amp;quot;,&amp;quot;McCaskill, ClaireClaire McCaskill&amp;quot;,&amp;quot;Gillibrand, KirstenKirsten Gillibrand&amp;quot;,&amp;quot;Kay Hagan&amp;quot;,&amp;quot;Shaheen, JeanneJeanne Shaheen&amp;quot;,&amp;quot;Ayotte, KellyKelly Ayotte&amp;quot;,&amp;quot;Heitkamp, HeidiHeidi Heitkamp&amp;quot;,&amp;quot;Fischer, DebDeb Fischer&amp;quot;,&amp;quot;Warren, ElizabethElizabeth Warren&amp;quot;,&amp;quot;Baldwin, TammyTammy Baldwin&amp;quot;,&amp;quot;Hirono, MazieMazie Hirono&amp;quot;)us_sen_femal &amp;lt;- dplyr::filter(us_sen, tolower(Senator) %in% tolower(female_sen_list))# it seems that the table with current us senators have name duplicated while scrapingus_sen_femal$Senator &amp;lt;- ifelse(grepl(&amp;quot;,&amp;quot;,us_sen_femal$Senator),sub(&amp;#39;.</description>
+    </item>
     
     <item>
       <title>UK EU Uncertainity</title>
@@ -129,7 +140,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>
