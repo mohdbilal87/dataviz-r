@@ -15,7 +15,7 @@ knitr::opts_chunk$set(collapse = TRUE, message=FALSE, warning=FALSE)
 
 The image below was featured in Financial Times News website. <https://ig.ft.com/india-pollution/> 
 
-<p><img src="/dataviz-r/post/2019-11-21_india_pollution_files/images/pollution.png" width="1056" /></p>
+<p><img src="/dataviz-r/post/2019-11-21_india_pollution_files/images/pollution.jpg" width="1056" /></p>
 
 ### Data Preparation
 
