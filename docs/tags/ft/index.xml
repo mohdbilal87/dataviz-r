@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ft on Data Viz in ggplot2</title>
+    <link>/dataviz-r/tags/ft/</link>
+    <description>Recent content in ft on Data Viz in ggplot2</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/dataviz-r/tags/ft/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>India Pollution</title>
+      <link>/dataviz-r/2019/11/21/india-pollution/</link>
+      <pubDate>Thu, 21 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/21/india-pollution/</guid>
+      <description>Original ImageThe image below was featured in Financial Times News website. https://ig.ft.com/india-pollution/
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data is downloaded from Nasa Socioeconomic Data and Application Centre.
+library(rnaturalearth)library(rnaturalearthdata)library(ggplot2)library(dplyr)library(ggrepel)# file &amp;lt;- &amp;#39;gwr_pm25_2016.tif&amp;#39;# # gdalUtils::gdalwarp(srcfile = file,# dstfile = sub(&amp;#39;\\.tif&amp;#39;,&amp;#39;_resampled.tif&amp;#39;,file),# tr = c(0.1,0.1),# r = &amp;#39;bilinear&amp;#39;)labels_df &amp;lt;- data.frame(stringsAsFactors=FALSE,place = c(&amp;quot;New Delhi&amp;quot;, &amp;quot;Chennai&amp;quot;, &amp;quot;Hyderabad&amp;quot;, &amp;quot;Kolkata&amp;quot;, &amp;quot;Mumbai&amp;quot;,&amp;quot;Wuhan&amp;quot;, &amp;quot;Chengdu&amp;quot;, &amp;quot;Shanghai&amp;quot;, &amp;quot;Xian&amp;quot;, &amp;quot;Harbin&amp;quot;, &amp;quot;Urumqi&amp;quot;,&amp;quot;Beijing&amp;quot;,&amp;quot;CHINA&amp;quot;, &amp;quot;INDIA&amp;quot;),long = c(77.</description>
+    </item>
+    
+  </channel>
+</rss>

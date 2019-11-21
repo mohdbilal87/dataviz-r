@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>India Pollution | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">India Pollution</span></h1>
+<h2 class="author">Dinesh [dinesh@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/21</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was featured in Financial Times News website. <a href="https://ig.ft.com/india-pollution/" class="uri">https://ig.ft.com/india-pollution/</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-21_india_pollution_files/images/pollution.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data is downloaded from Nasa Socioeconomic Data and Application Centre.</p>
+<pre class="r"><code>library(rnaturalearth)
+library(rnaturalearthdata)
+library(ggplot2)
+library(dplyr)
+library(ggrepel)
+
+# file &lt;- &#39;gwr_pm25_2016.tif&#39;
+# 
+# gdalUtils::gdalwarp(srcfile = file,
+#                     dstfile = sub(&#39;\\.tif&#39;,&#39;_resampled.tif&#39;,file),
+#                     tr = c(0.1,0.1),
+#                     r = &#39;bilinear&#39;)
+
+labels_df &lt;- data.frame(stringsAsFactors=FALSE,
+                        place = c(&quot;New Delhi&quot;, &quot;Chennai&quot;, &quot;Hyderabad&quot;, &quot;Kolkata&quot;, &quot;Mumbai&quot;,
+                                  &quot;Wuhan&quot;, &quot;Chengdu&quot;, &quot;Shanghai&quot;, &quot;Xian&quot;, &quot;Harbin&quot;, &quot;Urumqi&quot;,&quot;Beijing&quot;,
+                                  &quot;CHINA&quot;, &quot;INDIA&quot;),
+                        long = c(77.209, 80.27, 78.48, 88.36, 72.88, 114.3, 104.06, 121.48,
+                                 113.34, 126.53, 87.62, 116.4, 115, 78.96),
+                        lat = c(28.614, 13.08, 17.38, 22.57, 19.07, 30.59, 30.57, 31.23,
+                                33.62, 45.8, 43.825,39.9, 28, 20.593),
+                        font = c(&quot;bold&quot;,&quot;plain&quot;,&quot;plain&quot;,&quot;plain&quot;,&quot;plain&quot;,&quot;plain&quot;,&quot;plain&quot;,&quot;plain&quot;,
+                                 &quot;plain&quot;,&quot;plain&quot;,&quot;plain&quot;,&quot;bold&quot;,&quot;plain&quot;,&quot;plain&quot;)
+)
+
+places_df &lt;- labels_df %&gt;% filter(!(place %in% c(&quot;CHINA&quot;,&quot;INDIA&quot;)))
+countries_df &lt;- labels_df %&gt;% filter(place %in% c(&quot;CHINA&quot;,&quot;INDIA&quot;))
+
+data &lt;- raster::raster(&#39;./data/pollution/gwr_pm25_2016_resampled.tif&#39;) 
+
+world &lt;- ne_countries(scale = &quot;medium&quot;, continent = &quot;asia&quot;, returnclass = &quot;sf&quot;)
+
+data_df &lt;- raster::as.data.frame(data, xy = TRUE)
+data_df &lt;- data_df %&gt;% filter(!is.na(gwr_pm25_2016_resampled), gwr_pm25_2016_resampled &gt; 0)
+data_df$multi &lt;- cut(data_df$gwr_pm25_2016_resampled,breaks = c(seq(0,110,10),Inf), labels = paste0(seq(0,11,1) %&gt;% as.character(),&quot;x&quot;))
+
+color_labels &lt;- c(&quot;#A5E6F7&quot;,&quot;#FCF6C1&quot;,&quot;#FFCA8B&quot;,&quot;#FF9A68&quot;,&quot;#FF6951&quot;,&quot;#FB455A&quot;,&quot;#DD2E6E&quot;,&quot;#A92B63&quot;,&quot;#8C217D&quot;,&quot;#63277A&quot;,&quot;#3C2468&quot;,&quot;#151038&quot;)
+
+
+names(color_labels) &lt;- seq(0,11,1) %&gt;% as.character() %&gt;% paste0(.,&quot;x&quot;)</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>ggplot()  +
+  geom_raster(data = data_df,
+              aes(x = x, y = y, fill = multi)) + 
+  geom_sf(data = world, fill = NA, colour = &quot;grey&quot;) + 
+  geom_point(data = places_df, aes(x = long, y = lat), shape = 1) + 
+  geom_text_repel(data = places_df, aes(x = long, y = lat, label = place), segment.size = NA, fontface = places_df$font) + 
+  geom_text_repel(data = countries_df, aes(x = long, y = lat, label = place), segment.size = NA, colour = &quot;white&quot;, size = 5, fontface = &quot;bold&quot;) + 
+  scale_fill_manual(values = color_labels) +
+  theme_classic() + 
+  theme(plot.title = element_text(size = 15),
+        legend.position = &quot;bottom&quot;,
+        legend.direction = &quot;horizontal&quot;,
+        legend.spacing.x  = unit(0,&quot;cm&quot;),
+        legend.key.width = unit(0.75, &quot;cm&quot;), 
+        legend.key.height = unit(0.5, &quot;cm&quot;),
+        axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        axis.text = element_blank()) + 
+  labs(title = &quot;India&#39;s air quality is now far worse than China&#39;s ever was&quot;,
+       subtitle = &quot;PM2.5 pollution levels, 2016 (microgram/m3)&quot;) + 
+  ylim(5,60) +
+  xlim(60,140) +
+  guides(fill = guide_legend(title = &quot;Number of times above the WHO&#39;s safe limit&quot;,
+                             title.position = &quot;bottom&quot;,
+                             nrow = 1,
+                             title.hjust = 0,
+                             label.position=&quot;top&quot;)) </code></pre>
+<p><img src="/dataviz-r/post/2019-11-21_india_pollution_files/figure-html/plot-1.png" width="1152" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+
