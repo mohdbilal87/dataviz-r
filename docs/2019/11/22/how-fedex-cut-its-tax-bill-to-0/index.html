@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How Fedex cut its tax bill to 0 | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">How Fedex cut its tax bill to 0</span></h1>
+<h2 class="author">Bilal [bilal@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/22</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was published in New York Times. <a href="https://www.nytimes.com/2019/11/17/business/how-fedex-cut-its-tax-bill-to-0.html" class="uri">https://www.nytimes.com/2019/11/17/business/how-fedex-cut-its-tax-bill-to-0.html</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-22_saving_investment_files/images/saving_invst.png" width="1056" />
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.</p>
+<pre class="r"><code>library(dplyr)
+library(ggplot2)
+library(cowplot)
+
+heads &lt;- c(&quot;Communication services&quot;, &quot;Utilities&quot;, &quot;Consumer discretionary&quot;, &quot;Consumer Staples&quot;, &quot;Financials&quot;, &quot;Industrials&quot;, &quot;Health care&quot;, &quot;Materials&quot;, &quot;Energy&quot;, &quot;Information Technology&quot;, &quot;Real estate&quot;)
+
+savings_investment_data &lt;- data.frame(
+  heads = rep(heads,2),
+  by = c(rep(&quot;... effective tax rate&quot;,11),rep(&quot;... capital spending growth rate&quot;,11)),
+  value = Reduce(c,list(
+    etr = c(-15, -14, -12, -11, -9, -8, -5, -5, -4, -4, -1), 
+    csgr= c(6, -1, 4, 14, 0, 8, -1, 22, 71, 17, 3)
+  )),
+  stringsAsFactors = FALSE
+)
+savings_investment_data$by &lt;- factor(x = savings_investment_data$by, levels = c(&quot;... effective tax rate&quot;,&quot;... capital spending growth rate&quot;))
+savings_investment_data$heads &lt;- factor(x = savings_investment_data$heads, levels = rev(heads))
+
+dataetr &lt;- dplyr::filter(savings_investment_data, by == &quot;... effective tax rate&quot;)
+
+datacsgr &lt;- dplyr::filter(savings_investment_data, by == &quot;... capital spending growth rate&quot;) %&gt;% mutate(
+  position = ifelse(value&gt;=8, value-2, value+1),
+  position = ifelse(value&lt;0, value+5, value-2),
+  face = ifelse(value&gt;=8, &quot;bold&quot;, &quot;plain&quot;),
+  color = ifelse(value&gt;=8, &quot;white&quot;, &quot;black&quot;)
+)
+
+# credit @ https://stackoverflow.com/questions/50973713/ggplot2-creating-themed-title-subtitle-with-cowplot
+draw_label_theme &lt;- function(label, theme = NULL, element = &quot;text&quot;, ...) {
+  if (is.null(theme)) {
+    theme &lt;- ggplot2::theme_get()
+  }
+  if (!element %in% names(theme)) {
+    stop(&quot;Element must be a valid ggplot theme element name&quot;)
+  }
+
+  elements &lt;- ggplot2::calc_element(element, theme)
+
+  cowplot::draw_label(label, 
+                      fontfamily = elements$family,
+                      fontface = elements$face,
+                      colour = elements$color,
+                      size = elements$size,
+                      ...
+  )
+}</code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code># Left half of plot
+plhs &lt;- ggplot(data = dataetr) +
+  geom_col(aes(x = heads, y = value), fill = &quot;#1E4B75&quot;, width = 0.8) +
+  geom_text(color = &quot;white&quot;, aes(x = heads, y = value + 0.7, label = value), fontface = &quot;bold&quot;,
+            size = 4) +
+  coord_flip() +
+  theme_classic() +
+  theme(
+    legend.position=&quot;none&quot;,
+    axis.line = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(face = &quot;bold&quot;, size = 13),
+    axis.ticks = element_blank()
+  ) +
+labs(
+  x = NULL, y = NULL, title = &quot;... effective tax rate&quot;
+  )
+
+# Right half of plot
+prhs &lt;- ggplot(data = datacsgr) +
+  geom_col(aes(x = heads, y = value), fill = &quot;#7D96B0&quot;, width = 0.9) +
+  geom_text(aes(x = heads, y = position, label = value), size = 4, fontface = datacsgr$face,
+            color = datacsgr$color) +
+  coord_flip() +
+  theme_classic() +
+theme(
+  legend.position=&quot;none&quot;,
+  axis.line = element_blank(),
+  axis.text = element_blank(),
+  axis.ticks = element_blank()
+) +
+labs(
+  x = NULL, y = NULL, title = &quot;... capital spending growth rate&quot;
+  )
+
+# adding side by side using cowplot
+plot_row_gg &lt;- plot_grid(plhs, prhs)
+
+# adidng title and subtitle which will be appended using cowplot
+title_gg &lt;- ggplot() + 
+  labs(title = &quot;Big Savings and Small Investments&quot;, 
+       subtitle = &quot;Most corporations got big savings under the 2017 tax law, but they have reinvested relatively little of that money in capital spendings\n\nMedian change (in percentage points) for S&amp;P 500 companies from 2016 to 2018  in...&quot;) +
+  theme_classic() +
+  theme(
+    legend.position=&quot;none&quot;,
+    axis.line = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(size = 21, face = &quot;bold&quot;),
+    plot.subtitle = element_text(size = 13.5, face = &quot;plain&quot;, colour = &quot;grey&quot;)
+  )
+  
+with_title &lt;- plot_grid(title_gg, plot_row_gg, ncol = 1, rel_heights = c(0.2, 1))
+
+
+p1 &lt;- add_sub(plot = with_title,&quot;\nNotes: Effective tax rates are calculated as income tax expense divided by net income. Capital spending growth rate is year-over-year change in capital expenditure.&quot;,hjust = 0.40,size = 14)
+p2 &lt;- add_sub(p1,&quot;All figures are median change, by industry, from full-year 2016 to full-year 2018. | Source: FactSet&quot;,hjust = 0.67, size = 14)
+ggdraw(p2)</code></pre>
+<p><img src="/dataviz-r/post/2019-11-22_saving_investment_files/figure-html/plot-1.png" width="1056" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+

@@ -29,7 +29,7 @@ common &lt;- c(&quot;GLACNAME&quot;,&quot;geometry&quot;)
 
 glac_1966 &lt;- sf::st_read(&#39;./data/glacier/GNPglaciers_1966.shp&#39;) %&gt;% dplyr::select(c(common,&quot;Area1966&quot;)) %&gt;% mutate(year = &quot;1966&quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &#39;N. Swiftcurrent Glacier&#39;,&#39;North Swiftcurrent Glacier&#39;, GLACNAME)) %&gt;% 
   rename(Area = Area1966)
-## Reading layer `GNPglaciers_1966&#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.shp&#39; using driver `ESRI Shapefile&#39;
+## Reading layer `GNPglaciers_1966&#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 39 features and 13 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
@@ -39,7 +39,7 @@ glac_1966 &lt;- sf::st_read(&#39;./data/glacier/GNPglaciers_1966.shp&#39;) %&gt;
 
 glac_2015 &lt;- sf::st_read(&#39;./data/glacier/GNPglaciers_2015.shp&#39;) %&gt;% dplyr::select(c(common,&quot;Area2015&quot;)) %&gt;% mutate(year = &quot;2015&quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &#39;Miche Wabun&#39;,&#39;Miche Wabun Glacier&#39;, GLACNAME)) %&gt;% 
   rename(Area = Area2015)
-## Reading layer `GNPglaciers_2015&#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_2015.shp&#39; using driver `ESRI Shapefile&#39;
+## Reading layer `GNPglaciers_2015&#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_2015.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 39 features and 21 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY

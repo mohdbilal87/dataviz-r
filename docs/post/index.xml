@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 21 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 22 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How Fedex cut its tax bill to 0</title>
+      <link>/dataviz-r/2019/11/22/how-fedex-cut-its-tax-bill-to-0/</link>
+      <pubDate>Fri, 22 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/22/how-fedex-cut-its-tax-bill-to-0/</guid>
+      <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/2019/11/17/business/how-fedex-cut-its-tax-bill-to-0.html
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
+library(dplyr)library(ggplot2)library(cowplot)heads &amp;lt;- c(&amp;quot;Communication services&amp;quot;, &amp;quot;Utilities&amp;quot;, &amp;quot;Consumer discretionary&amp;quot;, &amp;quot;Consumer Staples&amp;quot;, &amp;quot;Financials&amp;quot;, &amp;quot;Industrials&amp;quot;, &amp;quot;Health care&amp;quot;, &amp;quot;Materials&amp;quot;, &amp;quot;Energy&amp;quot;, &amp;quot;Information Technology&amp;quot;, &amp;quot;Real estate&amp;quot;)savings_investment_data &amp;lt;- data.frame(heads = rep(heads,2),by = c(rep(&amp;quot;... effective tax rate&amp;quot;,11),rep(&amp;quot;... capital spending growth rate&amp;quot;,11)),value = Reduce(c,list(etr = c(-15, -14, -12, -11, -9, -8, -5, -5, -4, -4, -1), csgr= c(6, -1, 4, 14, 0, 8, -1, 22, 71, 17, 3))),stringsAsFactors = FALSE)savings_investment_data$by &amp;lt;- factor(x = savings_investment_data$by, levels = c(&amp;quot;.</description>
+    </item>
     
     <item>
       <title>India Pollution</title>
@@ -151,7 +162,7 @@ library(dplyr)library(ggthemes)library(tidyr)library(ggplot2)library(grid)l
       <guid>/dataviz-r/2019/11/07/mapping-50-years-of-ice-loss-in-glaciers/</guid>
       <description>Original ImageThe image below was published in New York Times. https://www.nytimes.com/interactive/2017/05/24/climate/mapping-50-years-of-ice-loss-in-glacier-national-park.html
 Data PreparationBelow is the accompanying code to reproduce the chart above. The data was manually created by studying the chart.
-library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\saideep\Documents\Git\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
+library(sf)library(maptools) library(rgdal)library(ggplot2)library(dplyr)common &amp;lt;- c(&amp;quot;GLACNAME&amp;quot;,&amp;quot;geometry&amp;quot;)glac_1966 &amp;lt;- sf::st_read(&amp;#39;./data/glacier/GNPglaciers_1966.shp&amp;#39;) %&amp;gt;% dplyr::select(c(common,&amp;quot;Area1966&amp;quot;)) %&amp;gt;% mutate(year = &amp;quot;1966&amp;quot;, GLACNAME = as.character(GLACNAME), GLACNAME = ifelse(GLACNAME == &amp;#39;N. Swiftcurrent Glacier&amp;#39;,&amp;#39;North Swiftcurrent Glacier&amp;#39;, GLACNAME)) %&amp;gt;% rename(Area = Area1966)## Reading layer `GNPglaciers_1966&amp;#39; from data source `C:\Users\actify\Desktop\projects\misc\dataviz-r\content\post\data\glacier\GNPglaciers_1966.</description>
     </item>
     
     <item>
