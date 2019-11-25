@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tokyo Rainfall | Data Viz in ggplot2</title>
+    <link rel="stylesheet" href="/dataviz-r/css/style.css" />
+    <link rel="stylesheet" href="/dataviz-r/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/dataviz-r/about/">About</a></li>
+      
+      <li><a href="https://github.com/mohdbilal87/dataviz-r">GitHub</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Tokyo Rainfall</span></h1>
+<h2 class="author">Dinesh [dinesh@actifydatalabs.com]</h2>
+<h2 class="date">2019/11/25</h2>
+</div>
+
+<main>
+
+
+
+<div id="original-image" class="section level3">
+<h3>Original Image</h3>
+<p>The image below was featured in Tableau Public Gallery. <a href="https://public.tableau.com/en-us/gallery/rainy-days-tokyo?tab=viz-of-the-day&amp;type=viz-of-the-day" class="uri">https://public.tableau.com/en-us/gallery/rainy-days-tokyo?tab=viz-of-the-day&amp;type=viz-of-the-day</a></p>
+<p>
+<img src="/dataviz-r/post/2019-11-25_tokyo_rainfall_files/images/tokyo_rainfall.png" width="1056"/>
+</p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<p>Below is the accompanying code to reproduce the chart above. The data is extracted from the data download tool in Tableau website.</p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(grid)
+library(cowplot)
+
+data &lt;- read.csv(file = &#39;./data/tokyo_rainfall.csv&#39;, stringsAsFactors = F) %&gt;%
+    janitor::clean_names()
+  
+colnames(data) &lt;- c(&quot;date&quot;,&quot;first_day&quot;, &quot;last_day&quot;, &quot;rainfall&quot;)
+
+data &lt;- data %&gt;% mutate(date = as.Date(date, format = &quot;%Y/%m/%d&quot;), rainfall = -1*rainfall)
+  </code></pre>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>GGPLOT2</h3>
+<pre class="r"><code>p1 &lt;- ggplot(data) + 
+  geom_bar(aes(x = date, y = rainfall), colour = &quot;white&quot;, stat=&#39;identity&#39;) +
+  annotate(geom = &quot;point&quot;, x = as.Date(&quot;2019-10-12&quot;), y = min(data$rainfall), colour = &quot;white&quot;, size = 3) + 
+  annotate(geom = &quot;text&quot;, x = as.Date(&quot;2015-06-12&quot;), y = min(data$rainfall) + 5, colour = &quot;white&quot;, size = 3, label = &quot;2019/10/12 has the Highest Precipitation in the last 10 years (209.5 mm a day)\ndue to the Typhoon Hagibis&quot;) + 
+  annotate(geom = &quot;segment&quot;, x = as.Date(&quot;2019-05-12&quot;), xend = as.Date(&quot;2019-05-12&quot;), y = min(data$rainfall) - 10, yend = min(data$rainfall) + 20,
+  colour = &quot;white&quot; ) + 
+    annotate(geom = &quot;segment&quot;, x = as.Date(&quot;2019-10-12&quot;), xend = as.Date(&quot;2019-05-12&quot;), y = min(data$rainfall) , yend = min(data$rainfall) + 5,
+  colour = &quot;white&quot; ) + 
+  theme(panel.background = element_rect(fill = &quot;black&quot;),
+        plot.background = element_rect(fill = &quot;black&quot;, colour = NA),
+    plot.title = element_text(hjust = 1, size = 40, colour = &quot;white&quot;),
+    plot.subtitle = element_text(hjust = 1, size = 12, colour = &quot;white&quot;),
+    plot.caption = element_text(colour = &quot;white&quot;),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text = element_blank()
+  ) +
+  labs(title = &quot;Rainy Days of TOKYO&quot;,
+       subtitle = &quot;Last Decade, there were 1185 Rainy Days (32.4 %of the total) in Tokyo,\n Total 16.324 mm (Average 13.8 mm per day) Rain fall into the City&quot;,
+       caption = &quot;Source https://www.data.jma.go.jp/gmd/risk/obsdl/index.php\nImage Source https://publicdomainq.net&quot;,
+       x = NULL, y = NULL)
+
+p2 &lt;- rasterGrob(png::readPNG(&#39;./data/umbrella.png&#39;), width = unit(0.85,&quot;npc&quot;), height = unit(0.75,&quot;npc&quot;))
+
+p3 &lt;- plot_grid(p2, p1, ncol = 2, rel_widths = c(1,2)) + 
+  theme(plot.background = element_rect(fill = &quot;black&quot;, colour = NA))
+print(p3)
+grid.text(label = &quot;Daily Precipitation of last 10 years (10/21/2009 - 10/20/2019)&quot;,
+          x = 0.52, y = 0.8, gp=gpar(fontsize=8, col=&quot;white&quot;))</code></pre>
+<p><img src="/dataviz-r/post/2019-11-25_tokyo_rainfall_files/figure-html/plot-1.png" width="960" /></p>
+</div>
+
+</main>
+
+  <footer>
+  
+  
+  </footer>
+  </body>
+</html>
+

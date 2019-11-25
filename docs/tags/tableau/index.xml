@@ -6,10 +6,21 @@
     <description>Recent content in tableau on Data Viz in ggplot2</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 25 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/dataviz-r/tags/tableau/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Tokyo Rainfall</title>
+      <link>/dataviz-r/2019/11/25/tokyo-rainfall/</link>
+      <pubDate>Mon, 25 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/dataviz-r/2019/11/25/tokyo-rainfall/</guid>
+      <description>Original ImageThe image below was featured in Tableau Public Gallery. https://public.tableau.com/en-us/gallery/rainy-days-tokyo?tab=viz-of-the-day&amp;amp;type=viz-of-the-day
+Data PreparationBelow is the accompanying code to reproduce the chart above. The data is extracted from the data download tool in Tableau website.
+library(ggplot2)library(dplyr)library(grid)library(cowplot)data &amp;lt;- read.csv(file = &amp;#39;./data/tokyo_rainfall.csv&amp;#39;, stringsAsFactors = F) %&amp;gt;%janitor::clean_names()colnames(data) &amp;lt;- c(&amp;quot;date&amp;quot;,&amp;quot;first_day&amp;quot;, &amp;quot;last_day&amp;quot;, &amp;quot;rainfall&amp;quot;)data &amp;lt;- data %&amp;gt;% mutate(date = as.Date(date, format = &amp;quot;%Y/%m/%d&amp;quot;), rainfall = -1*rainfall)GGPLOT2p1 &amp;lt;- ggplot(data) + geom_bar(aes(x = date, y = rainfall), colour = &amp;quot;white&amp;quot;, stat=&amp;#39;identity&amp;#39;) +annotate(geom = &amp;quot;point&amp;quot;, x = as.</description>
+    </item>
     
     <item>
       <title>UK EU Uncertainity</title>
